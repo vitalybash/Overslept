@@ -3,6 +3,13 @@ import pygame
 from developers_settings import *
 
 
+def load_image(img_path):
+    image = pygame.image.load(img_path).convert_alpha()
+    image = pygame.transform.scale(image, (1024, 576))
+    image_rect = image.get_rect(topleft=(0, 0))
+    return [image, image_rect]
+
+
 class Field:
     def __init__(self, width=5, height=5, cell_size=15):
         self.width, self.height = width, height
@@ -25,6 +32,34 @@ class Field:
         if 0 <= row < len(self.field) and 0 <= col < len(self.field[0]):
             return row, col
         return None
+
+
+class Game:
+    def __init__(self):
+        self.running = True
+
+    #  всякие параметры, которые мы ещё не придумали
+
+    def render_hub(self):
+        clock = pygame.time.Clock()
+        fps = 10
+        number_of_frame = 3
+        while self.running:
+            for event in pygame.event.get():
+                number_of_frame = number_of_frame % 3 + 1
+                frame_for_shadow = 12 + number_of_frame
+                frame_for_light = 15 + number_of_frame
+                screen.blit(load_image(PATHS[frame_for_light])[0],
+                            load_image(PATHS[frame_for_light])[1])
+                screen.blit(load_image(PATHS[frame_for_shadow])[0],
+                            load_image(PATHS[frame_for_shadow])[1])
+                screen.blit(load_image(PATHS[12])[0],
+                            load_image(PATHS[12])[1])
+                if event.type == pygame.QUIT:
+                    self.running = False
+            clock.tick(fps)
+            pygame.display.flip()
+        pygame.quit()
 
 
 if __name__ == '__main__':
@@ -99,6 +134,8 @@ if __name__ == '__main__':
                 if coords[0][0] < mouse_x < coords[0][2] and \
                         coords[0][1] < mouse_y < coords[0][3]:
                     buttons_condition = PATHS[4]
+                    game = Game()
+                    game.render_hub()
                 elif coords[1][0] < mouse_x < coords[1][2] and \
                         coords[1][1] < mouse_y < coords[1][3]:
                     buttons_condition = PATHS[6]
