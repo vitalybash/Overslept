@@ -82,6 +82,8 @@ if __name__ == '__main__':
                 elif coords[3][0] < mouse_x < coords[3][2] and \
                         coords[3][1] < mouse_y < coords[3][3]:
                     buttons_condition = PATHS[9]
+                else:
+                    buttons_condition = PATHS[2]
             #  обработка наведения на кнопки
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = event.pos
