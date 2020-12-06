@@ -32,60 +32,68 @@ if __name__ == '__main__':
     pygame.display.set_caption('OverSlept')
     screen = pygame.display.set_mode(SIZE)
     screen.fill((0, 0, 0))
-    #  field = Field(6, 3, cell_size=150)
-    #  field.render()
 
-    #  тоже самое, что и снизу, смысл создания сетки мне непонятен
-    #  но я пока оставил
-
+    # установление начального вида кнопок по средством переменной
     buttons_condition = PATHS[2]
-    #  установление начального вида кнопок по средством переменной
+
+    # Загрузка Интерфейса
+    main_menu_background = pygame.image.load(PATHS[1])
+    main_menu_background = pygame.transform.scale(main_menu_background,
+                                                  (1024, 576))
+    main_menu_rect = main_menu_background.get_rect(topleft=(0, 0))
+    screen.blit(main_menu_background, main_menu_rect)  # Установка спрайта фона
+
+    is_pressed = False  # Флаг зажатой клавиши мыши
     running = True
     while running:
-        for event in pygame.event.get():
-            main_menu_background = pygame.image.load(PATHS[1])
-            main_menu_background = pygame.transform.scale(main_menu_background,
-                                                          (1024, 576))
-            main_menu_rect = main_menu_background.get_rect(topleft=(0, 0))
-            screen.blit(main_menu_background, main_menu_rect)
-            #  установка спрайта фона
-            main_menu_buttons = pygame.image.load(buttons_condition)
-            main_menu_buttons = pygame.transform.scale(main_menu_buttons,
-                                                       (1024, 576))
-            main_buttons_rect = main_menu_background.get_rect(topleft=(0, 0))
-            screen.blit(main_menu_buttons, main_buttons_rect)
-            #  установка спрайта кнопок
-            #  в зависимости от выбранной кнопки
-            #  переменная зависимости - buttons_condition
+        # Переменная зависимости - buttons_condition
+        main_menu_buttons = pygame.image.load(buttons_condition)
+        main_menu_buttons = pygame.transform.scale(main_menu_buttons,
+                                                   (1024, 576))
+        main_buttons_rect = main_menu_background.get_rect(topleft=(0, 0))
+        # Установка спрайта кнопок в зависимости от выбранной кнопки
+        screen.blit(main_menu_buttons, main_buttons_rect)
 
-            coords = MAIN_MENU_BUTTONS_COORDINATES
-            #  список координат кнопок
+        coords = MAIN_MENU_BUTTONS_COORDINATES  # список координат кнопок
+        for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 running = False
-            #  if event.type == pygame.MOUSEBUTTONDOWN:
-            #      print(field.get_cell(event.pos))
 
-            #  я чёт не понял зачем ты тут с полем игрался ¯\(°_o)/¯
+            # Обработка наведения на кнопки
             if event.type == pygame.MOUSEMOTION:
                 mouse_x, mouse_y = event.pos
                 coords = MAIN_MENU_BUTTONS_COORDINATES
                 if coords[0][0] < mouse_x < coords[0][2] and \
                         coords[0][1] < mouse_y < coords[0][3]:
-                    buttons_condition = PATHS[3]
+                    if is_pressed:
+                        buttons_condition = PATHS[4]
+                    else:
+                        buttons_condition = PATHS[3]
                 elif coords[1][0] < mouse_x < coords[1][2] and \
                         coords[1][1] < mouse_y < coords[1][3]:
-                    buttons_condition = PATHS[5]
+                    if is_pressed:
+                        buttons_condition = PATHS[6]
+                    else:
+                        buttons_condition = PATHS[5]
                 elif coords[2][0] < mouse_x < coords[2][2] and \
                         coords[2][1] < mouse_y < coords[2][3]:
-                    buttons_condition = PATHS[7]
+                    if is_pressed:
+                        buttons_condition = PATHS[8]
+                    else:
+                        buttons_condition = PATHS[7]
                 elif coords[3][0] < mouse_x < coords[3][2] and \
                         coords[3][1] < mouse_y < coords[3][3]:
-                    buttons_condition = PATHS[9]
+                    if is_pressed:
+                        buttons_condition = PATHS[10]
+                    else:
+                        buttons_condition = PATHS[9]
                 else:
                     buttons_condition = PATHS[2]
-            #  обработка наведения на кнопки
+
+            # Обработка нажатия кнопки
             if event.type == pygame.MOUSEBUTTONDOWN:
+                is_pressed = True
                 mouse_x, mouse_y = event.pos
                 coords = MAIN_MENU_BUTTONS_COORDINATES
                 if coords[0][0] < mouse_x < coords[0][2] and \
@@ -100,7 +108,25 @@ if __name__ == '__main__':
                 elif coords[3][0] < mouse_x < coords[3][2] and \
                         coords[3][1] < mouse_y < coords[3][3]:
                     buttons_condition = PATHS[10]
+
+            # Обработка нажатия кнопки(отпуск клавиши)
+            if event.type == pygame.MOUSEBUTTONUP:
+                is_pressed = False
+                mouse_x, mouse_y = event.pos
+                coords = MAIN_MENU_BUTTONS_COORDINATES
+                if coords[0][0] < mouse_x < coords[0][2] and \
+                        coords[0][1] < mouse_y < coords[0][3]:
+                    buttons_condition = PATHS[3]
+                elif coords[1][0] < mouse_x < coords[1][2] and \
+                        coords[1][1] < mouse_y < coords[1][3]:
+                    buttons_condition = PATHS[5]
+                elif coords[2][0] < mouse_x < coords[2][2] and \
+                        coords[2][1] < mouse_y < coords[2][3]:
+                    buttons_condition = PATHS[7]
+                elif coords[3][0] < mouse_x < coords[3][2] and \
+                        coords[3][1] < mouse_y < coords[3][3]:
+                    buttons_condition = PATHS[9]
                     running = False
-            #  обработка нажатий на кнопки
+
         pygame.display.flip()
     pygame.quit()
