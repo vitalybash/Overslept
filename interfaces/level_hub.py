@@ -1,16 +1,19 @@
 import pygame as pg
 
+import basic_functions as func
 from developers_settings import *
 
-import basic_functions as func
 
-
+#  Класс отвечающий за реализацию хаба уровней и всего что с ним звязанно
 class LevelHub:
+
     def __init__(self):
-        self.levels_had_been_done = 0
+        self.levels_had_been_done = 'некоторый показатель ' \
+                                    'уровней который мы будем ' \
+                                    'брать из текущего сохранения'
         self.clock = pg.time.Clock()
         self.fps = 2
-        self.running = True
+        self.running = self.is_triggered = True
         self.number_of_frame = 3
 
     def render_map(self, screen):
@@ -33,4 +36,4 @@ class LevelHub:
         #  задержка
         self.clock.tick(self.fps)
         pg.display.flip()
-        return self.running
+        return self.running, self.is_triggered

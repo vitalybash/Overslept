@@ -1,8 +1,8 @@
 import pygame
 
 from developers_settings import *
+from interfaces.level_hub import LevelHub
 from interfaces.main_menu import MainMenu
-from interfaces.hub_menu import HubMenu
 
 
 def load_image(img_path):
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     main_triggered = True
 
     # Level Hub
-    HUB_WND = HubMenu()
+    LEVEL_HUB = LevelHub()
     hub_triggered = False
 
     running = True
@@ -35,6 +35,4 @@ if __name__ == '__main__':
             if button == 0 and not main_triggered:
                 hub_triggered = True
         elif hub_triggered:
-            running, hub_triggered = HUB_WND.render(screen)
-
-
+            running, hub_triggered = LEVEL_HUB.render_map(screen)
