@@ -13,7 +13,7 @@ class LevelHub:
         self.running = True
         self.number_of_frame = 3
 
-    def render(self, screen):
+    def render_map(self, screen):
         #  установка фона
         screen.blit(func.load_image(PATHS[12])[0],
                     func.load_image(PATHS[12])[1])
