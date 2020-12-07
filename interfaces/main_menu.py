@@ -7,10 +7,10 @@ class MainMenu:
     """Класс для работы с интерфейсом главного меню, и посредственно его
        настройки."""
     def __init__(self):
-        self.buttons_condition = PATHS[2]
-        self.coords = MAIN_MENU_BUTTONS_COORDINATES
-        self.is_pressed = False
-        self.running = True
+        self.buttons_condition = PATHS[2]  # Состояние кнопок по умолчанию
+        self.coords = MAIN_MENU_BUTTONS_COORDINATES  # Распаковка координат кнопок
+        self.is_pressed = False  # Флаг зажатой клавиши мыши
+        self.running = True  # Флаг игрового цикла главного меню
 
     def render(self, screen):
         # Установка спрайта фона
