@@ -11,6 +11,7 @@ class MainMenu:
         self.coords = MAIN_MENU_BUTTONS_COORDINATES  # Распаковка координат кнопок
         self.is_pressed = False  # Флаг зажатой клавиши мыши
         self.running = True  # Флаг игрового цикла главного меню
+        self.is_triggered = True
 
     def render(self, screen):
         # Установка спрайта фона
@@ -19,6 +20,7 @@ class MainMenu:
         # Переменная зависимости - buttons_condition
         screen.blit(load_image(self.buttons_condition)[0],
                     load_image(self.buttons_condition)[1])
+        button = None  # Кнопка которую нажали(если нажали)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -78,6 +80,7 @@ class MainMenu:
                 if coords[0][0] < mouse_x < coords[0][2] and \
                         coords[0][1] < mouse_y < coords[0][3]:
                     self.buttons_condition = PATHS[3]
+                    self.is_triggered, button = False, 0
                 elif coords[1][0] < mouse_x < coords[1][2] and \
                         coords[1][1] < mouse_y < coords[1][3]:
                     self.buttons_condition = PATHS[5]
@@ -91,4 +94,4 @@ class MainMenu:
                 else:
                     self.buttons_condition = PATHS[2]
         pygame.display.flip()
-        return self.running
+        return self.running, self.is_triggered, button
