@@ -1,27 +1,24 @@
 import pygame
 from developers_settings import *
+from basic_functions import load_image
 
 
 class MainMenu:
+    """Класс для работы с интерфейсом главного меню, и посредственно его
+       настройки."""
     def __init__(self):
         self.buttons_condition = PATHS[2]
         self.coords = MAIN_MENU_BUTTONS_COORDINATES
         self.is_pressed = False
         self.running = True
 
-    def load_image(self, img_path):
-        image = pygame.image.load(img_path).convert_alpha()
-        image = pygame.transform.scale(image, (1024, 576))
-        image_rect = image.get_rect(topleft=(0, 0))
-        return [image, image_rect]
-
     def render(self, screen):
         # Установка спрайта фона
-        screen.blit(self.load_image(PATHS[1])[0], self.load_image(PATHS[1])[1])
+        screen.blit(load_image(PATHS[1])[0], load_image(PATHS[1])[1])
         # Установка спрайта кнопок в зависимости от выбранной кнопки
         # Переменная зависимости - buttons_condition
-        screen.blit(self.load_image(self.buttons_condition)[0],
-                    self.load_image(self.buttons_condition)[1])
+        screen.blit(load_image(self.buttons_condition)[0],
+                    load_image(self.buttons_condition)[1])
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
