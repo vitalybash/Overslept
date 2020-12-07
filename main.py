@@ -3,6 +3,13 @@ import pygame
 from developers_settings import *
 
 
+def load_image(img_path):
+    image = pygame.image.load(img_path).convert_alpha()
+    image = pygame.transform.scale(image, (1024, 576))
+    image_rect = image.get_rect(topleft=(0, 0))
+    return [image, image_rect]
+
+
 class Field:
     def __init__(self, width=5, height=5, cell_size=15):
         self.width, self.height = width, height
@@ -35,31 +42,20 @@ if __name__ == '__main__':
 
     # установление начального вида кнопок по средством переменной
     buttons_condition = PATHS[2]
-
-    # Загрузка Интерфейса
-    main_menu_background = pygame.image.load(PATHS[1])
-    main_menu_background = pygame.transform.scale(main_menu_background,
-                                                  (1024, 576))
-    main_menu_rect = main_menu_background.get_rect(topleft=(0, 0))
-    screen.blit(main_menu_background, main_menu_rect)  # Установка спрайта фона
-
+    # список координат кнопок
+    coords = MAIN_MENU_BUTTONS_COORDINATES
     is_pressed = False  # Флаг зажатой клавиши мыши
     running = True
     while running:
-        # Переменная зависимости - buttons_condition
-        main_menu_buttons = pygame.image.load(buttons_condition)
-        main_menu_buttons = pygame.transform.scale(main_menu_buttons,
-                                                   (1024, 576))
-        main_buttons_rect = main_menu_background.get_rect(topleft=(0, 0))
+        # Установка спрайта фона
+        screen.blit(load_image(PATHS[1])[0], load_image(PATHS[1])[1])
         # Установка спрайта кнопок в зависимости от выбранной кнопки
-        screen.blit(main_menu_buttons, main_buttons_rect)
-
-        coords = MAIN_MENU_BUTTONS_COORDINATES  # список координат кнопок
+        # Переменная зависимости - buttons_condition
+        screen.blit(load_image(buttons_condition)[0],
+                    load_image(buttons_condition)[1])
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 running = False
-
             # Обработка наведения на кнопки
             if event.type == pygame.MOUSEMOTION:
                 mouse_x, mouse_y = event.pos
@@ -88,9 +84,6 @@ if __name__ == '__main__':
                         buttons_condition = PATHS[10]
                     else:
                         buttons_condition = PATHS[9]
-                else:
-                    buttons_condition = PATHS[2]
-
             # Обработка нажатия кнопки
             if event.type == pygame.MOUSEBUTTONDOWN:
                 is_pressed = True
@@ -108,6 +101,8 @@ if __name__ == '__main__':
                 elif coords[3][0] < mouse_x < coords[3][2] and \
                         coords[3][1] < mouse_y < coords[3][3]:
                     buttons_condition = PATHS[10]
+                else:
+                    buttons_condition = PATHS[2]
 
             # Обработка нажатия кнопки(отпуск клавиши)
             if event.type == pygame.MOUSEBUTTONUP:
@@ -127,6 +122,8 @@ if __name__ == '__main__':
                         coords[3][1] < mouse_y < coords[3][3]:
                     buttons_condition = PATHS[9]
                     running = False
+                else:
+                    buttons_condition = PATHS[2]
 
         pygame.display.flip()
     pygame.quit()
