@@ -19,3 +19,7 @@ MAIN_MENU_BUTTONS_COORDINATES = [MAIN_MENU_PLAY,
                                  MAIN_MENU_SAVE,
                                  MAIN_MENU_SETTINGS,
                                  MAIN_MENU_QUIT]
+
+PIONER_LEVEL_PLAY = [412, 80, 508, 96]
+#  координаты начал и концов кнопок levelhub'а
+LEVEL_HUB_BUTTONS_COORDINATES = [PIONER_LEVEL_PLAY]
