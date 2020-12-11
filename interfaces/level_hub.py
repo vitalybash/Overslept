@@ -13,7 +13,6 @@ class LevelHub:
                                     'брать из текущего сохранения'
         self.clock = pg.time.Clock()
         self.fps = 10
-        self.running = self.is_triggered = True
         #  кратность начального кадра теней и света
         self.number_of_frame = 3
         #  флаг отвечающий за создание надписи пионер
@@ -69,44 +68,47 @@ class LevelHub:
             screen.blit(func.load_image(PATHS[self.pioner_frame])[0],
                         func.load_image(PATHS[self.pioner_frame])[1])
 
-        #  принятие и обработка событий
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.running = False
-            if self.pioner_already_here_flag:
+    def run(self, screen):
+        running = True
+        while running:
+            self.render_map(screen)
+            #  принятие и обработка событий
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    running = False
+                if self.pioner_already_here_flag:
 
-                #  отлов наведения мышки на кнопки
-                if event.type == pg.MOUSEMOTION:
-                    mouse_x, mouse_y = event.pos
-                    coords = LEVEL_HUB_BUTTONS_COORDINATES
-                    #  проверка наведения на "пионер"
-                    if coords[0][0] < mouse_x < coords[0][2] and \
-                            coords[0][1] < mouse_y < coords[0][3]:
-                        self.pioner_frame = 25
-                    else:
-                        self.pioner_frame = 24
+                    #  отлов наведения мышки на кнопки
+                    if event.type == pg.MOUSEMOTION:
+                        mouse_x, mouse_y = event.pos
+                        coords = LEVEL_HUB_BUTTONS_COORDINATES
+                        #  проверка наведения на "пионер"
+                        if coords[0][0] < mouse_x < coords[0][2] and \
+                                coords[0][1] < mouse_y < coords[0][3]:
+                            self.pioner_frame = 25
+                        else:
+                            self.pioner_frame = 24
 
-                #  отлов нажатия мышки на кнопки
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    mouse_x, mouse_y = event.pos
-                    coords = LEVEL_HUB_BUTTONS_COORDINATES
-                    #  проверка нажатия на "пионер"
-                    if coords[0][0] < mouse_x < coords[0][2] and \
-                            coords[0][1] < mouse_y < coords[0][3]:
-                        self.pioner_frame = 26
-                    else:
-                        self.pioner_frame = 24
-                #  отлов отжатия мышки
-                if event.type == pg.MOUSEBUTTONUP:
-                    mouse_x, mouse_y = event.pos
-                    coords = LEVEL_HUB_BUTTONS_COORDINATES
-                    #  проверка отжатия "пионер"
-                    if coords[0][0] < mouse_x < coords[0][2] and \
-                            coords[0][1] < mouse_y < coords[0][3]:
-                        self.pioner_frame = 25
-                    else:
-                        self.pioner_frame = 24
-        #  задержка
-        self.clock.tick(self.fps)
-        pg.display.flip()
-        return self.running, self.is_triggered
+                    #  отлов нажатия мышки на кнопки
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        mouse_x, mouse_y = event.pos
+                        coords = LEVEL_HUB_BUTTONS_COORDINATES
+                        #  проверка нажатия на "пионер"
+                        if coords[0][0] < mouse_x < coords[0][2] and \
+                                coords[0][1] < mouse_y < coords[0][3]:
+                            self.pioner_frame = 26
+                        else:
+                            self.pioner_frame = 24
+                    #  отлов отжатия мышки
+                    if event.type == pg.MOUSEBUTTONUP:
+                        mouse_x, mouse_y = event.pos
+                        coords = LEVEL_HUB_BUTTONS_COORDINATES
+                        #  проверка отжатия "пионер"
+                        if coords[0][0] < mouse_x < coords[0][2] and \
+                                coords[0][1] < mouse_y < coords[0][3]:
+                            self.pioner_frame = 25
+                        else:
+                            self.pioner_frame = 24
+            #  задержка
+            self.clock.tick(self.fps)
+            pg.display.flip()
