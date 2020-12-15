@@ -18,11 +18,11 @@ class LevelHub:
         #  флаг отвечающий за создание надписи пионер
         self.pioner_already_here_flag = False
         #  начальный кадр надписи пионер
-        self.pioner_frame = 18
+        self.pioner_frame = 41
         #  флаг отвечающий за создание путей
         self.ways_already_here_flag = False
         #  начальный кадр путей
-        self.way_frame = 27
+        self.way_frame = 108
         #  проверка сколько уровней было пройдено
         #  и установление количества проигрываемых надписей
         if self.levels_had_been_done:
@@ -31,12 +31,12 @@ class LevelHub:
 
     def render_map(self, screen):
         #  установка фона
-        screen.blit(func.load_image(PATHS[12])[0],
-                    func.load_image(PATHS[12])[1])
+        screen.blit(func.load_image(PATHS[32])[0],
+                    func.load_image(PATHS[32])[1])
         #  установление порядкового номера кадра для теней и света
         self.number_of_frame = self.number_of_frame % 3 + 1
-        frame_for_shadow = 12 + self.number_of_frame
-        frame_for_light = 15 + self.number_of_frame
+        frame_for_shadow = 33 + self.number_of_frame
+        frame_for_light = 37 + self.number_of_frame
         #  установка теней
         screen.blit(func.load_image(PATHS[frame_for_shadow])[0],
                     func.load_image(PATHS[frame_for_shadow])[1])
@@ -85,9 +85,9 @@ class LevelHub:
                         #  проверка наведения на "пионер"
                         if coords[0][0] < mouse_x < coords[0][2] and \
                                 coords[0][1] < mouse_y < coords[0][3]:
-                            self.pioner_frame = 25
+                            self.pioner_frame = 48
                         else:
-                            self.pioner_frame = 24
+                            self.pioner_frame = 47
 
                     #  отлов нажатия мышки на кнопки
                     if event.type == pg.MOUSEBUTTONDOWN:
@@ -96,9 +96,9 @@ class LevelHub:
                         #  проверка нажатия на "пионер"
                         if coords[0][0] < mouse_x < coords[0][2] and \
                                 coords[0][1] < mouse_y < coords[0][3]:
-                            self.pioner_frame = 26
+                            self.pioner_frame = 49
                         else:
-                            self.pioner_frame = 24
+                            self.pioner_frame = 47
                     #  отлов отжатия мышки
                     if event.type == pg.MOUSEBUTTONUP:
                         mouse_x, mouse_y = event.pos
@@ -106,9 +106,9 @@ class LevelHub:
                         #  проверка отжатия "пионер"
                         if coords[0][0] < mouse_x < coords[0][2] and \
                                 coords[0][1] < mouse_y < coords[0][3]:
-                            self.pioner_frame = 25
+                            self.pioner_frame = 48
                         else:
-                            self.pioner_frame = 24
+                            self.pioner_frame = 47
             #  задержка
             self.clock.tick(self.fps)
             pg.display.flip()
