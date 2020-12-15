@@ -8,21 +8,53 @@ from developers_settings import *
 class LevelHub:
 
     def __init__(self):
-        self.levels_had_been_done = 'некоторый показатель ' \
-                                    'уровней который мы будем ' \
-                                    'брать из текущего сохранения'
+        #  некоторый показатель
+        #  уровней который мы будем
+        #  брать из текущего сохранения
+        self.levels_had_been_done = 0
+
         self.clock = pg.time.Clock()
         self.fps = 10
         #  кратность начального кадра теней и света
         self.number_of_frame = 3
-        #  флаг отвечающий за создание надписи пионер
+
+        #  флаг отвечающий за создание надписи Пионер
         self.pioner_already_here_flag = False
-        #  начальный кадр надписи пионер
+        #  начальный кадр надписи Пионер
         self.pioner_frame = 41
-        #  флаг отвечающий за создание путей
-        self.ways_already_here_flag = False
+        #  флаг отвечающий за создание надписи Крест
+        self.krest_already_here_flag = False
+        #  начальный кадр надписи Крест
+        self.krest_frame = 50
+        #  флаг отвечающий за создание надписи Книжный
+        self.knijniy_already_here_flag = False
+        #  начальный кадр надписи Книжный
+        self.knijniy_frame = 58
+        #  флаг отвечающий за создание надписи Спорт
+        self.sport_already_here_flag = False
+        #  начальный кадр надписи Спорт
+        self.sport_frame = 68
+        #  флаг отвечающий за создание надписи Мойка
+        self.moika_already_here_flag = False
+        #  начальный кадр надписи Мойка
+        self.moika_frame = 76
+        #  флаг отвечающий за создание надписи Спас
+        self.spas_already_here_flag = False
+        #  начальный кадр надписи Спас
+        self.spas_frame = 84
+        #  флаг отвечающий за создание надписи Фрунзе
+        self.frunze_already_here_flag = False
+        #  начальный кадр надписи Фрунзе
+        self.frunze_frame = 91
+        #  флаг отвечающий за создание надписи Врата
+        self.vrata_already_here_flag = False
+        #  начальный кадр надписи Врата
+        self.vrata_frame = 100
+
         #  начальный кадр путей
         self.way_frame = 108
+        #  флаг отвечающий за создание путей
+        self.ways_already_here_flag = False
         #  проверка сколько уровней было пройдено
         #  и установление количества проигрываемых надписей
         if self.levels_had_been_done:
