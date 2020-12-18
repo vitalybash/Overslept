@@ -11,7 +11,7 @@ class LevelHub:
         #  некоторый показатель
         #  уровней который мы будем
         #  брать из текущего сохранения
-        self.levels_had_been_done = 0
+        self.levels_had_been_done = 1
 
         self.clock = pg.time.Clock()
         self.fps = 10
