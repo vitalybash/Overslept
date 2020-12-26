@@ -2,6 +2,7 @@ import pygame
 from developers_settings import *
 from basic_functions import load_image
 from interfaces.level_hub import LevelHub
+from music.music import Music
 
 
 class MainMenu:
@@ -26,6 +27,9 @@ class MainMenu:
                Button-2 = Настройки, Button-3 = Выход. 
             """
             button = None  # Кнопка которую нажали(если нажали)
+            # Установка музыки на фоне(осторожно, может быть громко)
+            """Музыка: 1 = Музыка главного меню"""
+            Music().run(1)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
