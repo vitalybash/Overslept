@@ -29,7 +29,7 @@ class MainMenu:
             button = None  # Кнопка которую нажали(если нажали)
             # Установка музыки на фоне(осторожно, может быть громко)
             """Музыка: 1 = Музыка главного меню"""
-            Music().run('main_menu_melody.wav')
+            Music().run('main_menu_melody.ogg')
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
