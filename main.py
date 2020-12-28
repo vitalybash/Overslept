@@ -15,8 +15,7 @@ if __name__ == '__main__':
     pygame.init()
     pygame.display.set_caption('OverSlept')
     screen = pygame.display.set_mode(SIZE)
-    # пока что убираю эту строку(не даёт запустить программу)
-    # pygame.display.set_icon(load_image(PATHS[12])[0])
+    pygame.display.set_icon(load_image(PATHS[12])[0])
     screen.fill((0, 0, 0))
 
     MainMenu().run(screen)
