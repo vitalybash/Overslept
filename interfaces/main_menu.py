@@ -28,8 +28,6 @@ class MainMenu:
                Button-2 = Настройки, Button-3 = Выход. 
             """
             button = None  # Кнопка которую нажали(если нажали)
-            # Установка музыки на фоне
-            Music().run('main_menu_melody.ogg')
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -105,6 +103,8 @@ class MainMenu:
                     else:
                         self.buttons_condition = PATHS[3]
             pygame.display.flip()
+            # Установка музыки на фоне
+            Music().run('main_menu_melody.ogg')
             if button == 0:
                 # Выключение музыки на фоне
                 Music().run(0)
