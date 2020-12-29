@@ -17,6 +17,9 @@ class MainMenu:
     def run(self, screen):
         """Игровой цикл"""
         running = True
+        # Установка музыки на фоне
+        music = Music()
+        music.run('main_menu_melody.ogg')
         while running:
             # Установка спрайта фона
             screen.blit(load_image(PATHS[2])[0], load_image(PATHS[2])[1])
@@ -103,9 +106,7 @@ class MainMenu:
                     else:
                         self.buttons_condition = PATHS[3]
             pygame.display.flip()
-            # Установка музыки на фоне
-            Music().run('main_menu_melody.ogg')
             if button == 0:
                 # Выключение музыки на фоне
-                Music().run(0)
+                music.stop()
                 LevelHub().run(screen)
