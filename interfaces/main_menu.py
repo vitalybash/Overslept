@@ -11,15 +11,16 @@ class MainMenu:
 
     def __init__(self):
         self.buttons_condition = PATHS[3]  # Состояние кнопок по умолчанию
-        self.coords = MAIN_MENU_BUTTONS_COORDINATES  # Распаковка координат кнопок
+        self.coords = MAIN_MENU_BUTTONS_COORDINATES  # Распаковка координат
+        # кнопок
         self.is_pressed = False  # Флаг зажатой клавиши мыши
 
     def run(self, screen):
         """Игровой цикл"""
         running = True
-        # Установка музыки на фоне
-        music = Music()
-        music.run('main_menu_melody.ogg')
+        # Установка музыки главного меню
+        music_menu = Music('main_menu_melody.ogg')
+        music_menu.run()
         while running:
             # Установка спрайта фона
             screen.blit(load_image(PATHS[2])[0], load_image(PATHS[2])[1])
@@ -107,6 +108,6 @@ class MainMenu:
                         self.buttons_condition = PATHS[3]
             pygame.display.flip()
             if button == 0:
-                # Выключение музыки на фоне
-                music.stop()
+                # Выключение музыки главного меню
+                music_menu.stop()
                 LevelHub().run(screen)
