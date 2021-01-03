@@ -2,9 +2,12 @@ import pygame as pg
 
 import basic_functions as func
 from developers_settings import *
+from music.music import Music
 
 
 #  Класс отвечающий за реализацию хаба уровней и всего что с ним звязанно
+
+
 class LevelHub:
 
     def __init__(self):
@@ -69,6 +72,9 @@ class LevelHub:
                         func.load_image(PATHS[self.pioner_frame])[1])
 
     def run(self, screen):
+        # Установка музыки карты
+        music_map = Music('map_melody.ogg')
+        music_map.run()
         running = True
         while running:
             self.render_map(screen)
@@ -76,6 +82,8 @@ class LevelHub:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
+                    # Остановка музыки карты
+                    music_map.stop()
                 if self.pioner_already_here_flag:
 
                     #  отлов наведения мышки на кнопки
@@ -99,6 +107,7 @@ class LevelHub:
                             self.pioner_frame = 49
                         else:
                             self.pioner_frame = 47
+
                     #  отлов отжатия мышки
                     if event.type == pg.MOUSEBUTTONUP:
                         mouse_x, mouse_y = event.pos
