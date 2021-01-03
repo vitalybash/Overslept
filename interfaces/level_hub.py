@@ -73,9 +73,7 @@ class LevelHub:
 
     def run(self, screen):
         # Установка музыки карты
-        music_menu = Music('main_menu_melody.ogg')
         music_map = Music('map_melody.ogg')
-        music_menu.stop()
         music_map.run()
         running = True
         while running:
@@ -84,10 +82,8 @@ class LevelHub:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
-                    # Остановка музыки карты и установка другой
-                    # (пока что музыки меню)
+                    # Остановка музыки карты
                     music_map.stop()
-                    music_menu.run()
                 if self.pioner_already_here_flag:
 
                     #  отлов наведения мышки на кнопки
