@@ -37,8 +37,14 @@ LEVEL_HUB_BUTTONS_COORDINATES = [PIONER_LEVEL_PLAY,
                                  SPAS_LEVEL_PLAY,
                                  FRUNZE_LEVEL_PLAY,
                                  VRATA_LEVEL_PLAY]
+#  кадры обычных состояний названий уровней
 LEVEL_NAMES_BASIC_FRAMES = [47, 54, 63, 70, 77, 83, 91, 98]
+#  кадры активированных путей и названий уровней
 ACTION_BUTTONS_FRAMES = [48, 49, 55, 56, 64, 65, 71, 72,
                          78, 79, 84, 85, 93, 92, 98, 100]
 ACTION_WAY_FRAMES = [105, 113, 120, 128, 136, 144, 152, 160]
+#  координаты значений здоровья и денег
 HEALTH_PLACE = [528, 4]
+MONEY_PLACE = [840, 8]
+#  координаты кнопки паузы
+PAUSE_BUTTON_COORDINATES = [992, 4, 1016, 28]

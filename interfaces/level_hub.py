@@ -17,7 +17,6 @@ class LevelHub:
         ''' ^ Если хочется посмотреть на отображение здоровья'''
         self.money = 100
         ''' ^ Если хочется посмотреть на отображение количества денег'''
-
         self.clock = pg.time.Clock()
         self.fps = 10
         #  кратность начального кадра теней и света
@@ -64,6 +63,8 @@ class LevelHub:
         else:
             self.end_of_level_names_frames = 47
             self.end_of_way_frames = 104
+        #  кадр обычного вида кнопки паузы
+        self.pause_button_frame = 175
 
     def render_map(self, screen):
         #  установка фона
@@ -122,16 +123,23 @@ class LevelHub:
         running = True
         while running:
             self.render_map(screen)
+            self.money_and_pauseBtn_render(screen)
             #  принятие и обработка событий
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
                 if self.all_levels_already_here:
 
+                    #  координаты названий уровней
+                    coords = LEVEL_HUB_BUTTONS_COORDINATES
+
+                    #  координаты кнопки паузы
+                    pause_btn_cord = PAUSE_BUTTON_COORDINATES
+
                     #  отлов наведения мышки на кнопки
                     if event.type == pg.MOUSEMOTION:
                         mouse_x, mouse_y = event.pos
-                        coords = LEVEL_HUB_BUTTONS_COORDINATES
+
                         #  проверка наведения на "пионер"
                         if coords[0][0] < mouse_x < coords[0][2] and \
                                 coords[0][1] < mouse_y < coords[0][3]:
@@ -181,10 +189,17 @@ class LevelHub:
                         else:
                             self.basic_level_names_list[7][0] = 98
 
+                        #  отлов наведения на кнопку паузы
+                        if pause_btn_cord[0] < mouse_x < pause_btn_cord[2] and \
+                                pause_btn_cord[1] < mouse_y < pause_btn_cord[3]:
+                            self.pause_button_frame = 176
+                        else:
+                            self.pause_button_frame = 175
+
                     #  отлов нажатия мышки на кнопки
                     if event.type == pg.MOUSEBUTTONDOWN:
                         mouse_x, mouse_y = event.pos
-                        coords = LEVEL_HUB_BUTTONS_COORDINATES
+
                         #  проверка нажатия на "пионер"
                         if coords[0][0] < mouse_x < coords[0][2] and \
                                 coords[0][1] < mouse_y < coords[0][3]:
@@ -234,10 +249,17 @@ class LevelHub:
                         else:
                             self.basic_level_names_list[7][0] = 98
 
+                        #  отлов нажатия на кнопку паузы
+                        if pause_btn_cord[0] < mouse_x < pause_btn_cord[2] and \
+                                pause_btn_cord[1] < mouse_y < pause_btn_cord[3]:
+                            self.pause_button_frame = 177
+                        else:
+                            self.pause_button_frame = 175
+
                     #  отлов отжатия мышки
                     if event.type == pg.MOUSEBUTTONUP:
                         mouse_x, mouse_y = event.pos
-                        coords = LEVEL_HUB_BUTTONS_COORDINATES
+
                         #  проверка отжатия "пионер"
                         if coords[0][0] < mouse_x < coords[0][2] and \
                                 coords[0][1] < mouse_y < coords[0][3]:
@@ -287,6 +309,13 @@ class LevelHub:
                         else:
                             self.basic_level_names_list[7][0] = 98
 
+                        #  отлов отжатия кнопки паузы
+                        if pause_btn_cord[0] < mouse_x < pause_btn_cord[2] and \
+                                pause_btn_cord[1] < mouse_y < pause_btn_cord[3]:
+                            self.pause_button_frame = 176
+                        else:
+                            self.pause_button_frame = 175
+
             #  задержка
             self.clock.tick(self.fps)
             pg.display.flip()
@@ -323,3 +352,10 @@ class LevelHub:
         font = pg.font.SysFont('agencyfb', 40)
         text = font.render(f'{self.health}', True, (250, 250, 250))
         screen.blit(text, (HEALTH_PLACE[0], HEALTH_PLACE[1]))
+
+    def money_and_pauseBtn_render(self, screen):
+        screen.blit(func.load_image(PATHS[self.pause_button_frame])[0],
+                    func.load_image(PATHS[self.pause_button_frame])[1])
+        font = pg.font.SysFont('agencyfb', 40)
+        text = font.render(f'{self.money}', True, (200, 200, 200))
+        screen.blit(text, (MONEY_PLACE[0], MONEY_PLACE[1]))
