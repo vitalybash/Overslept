@@ -48,3 +48,7 @@ HEALTH_PLACE = [528, 4]
 MONEY_PLACE = [840, 8]
 #  координаты кнопки паузы
 PAUSE_BUTTON_COORDINATES = [992, 4, 1016, 28]
+#  координаты объектов магазинов
+GUN_MAGAZINE = [92, 392, 188, 572]
+FOOD_MAGAZINE = [100, 100, 228, 308]
+SKILLS_MAGAZINE = [728, 176, 1020, 508]

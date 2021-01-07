@@ -65,6 +65,12 @@ class LevelHub:
             self.end_of_way_frames = 104
         #  кадр обычного вида кнопки паузы
         self.pause_button_frame = 175
+        #  флаг появления магазина оружия
+        self.visible_guns = False
+        #  флаг появления магазина еды
+        self.visible_food = False
+        #  флаг появления магазина умений
+        self.visible_skills = False
 
     def render_map(self, screen):
         #  установка фона
@@ -122,8 +128,12 @@ class LevelHub:
     def run(self, screen):
         running = True
         while running:
+            #  отрисовка карты уровней и уровня здоровья
             self.render_map(screen)
+            #  отрисовка баланса и кнопки паузы
             self.money_and_pauseBtn_render(screen)
+            #  отрисовка отображения магазинов
+            self.shops_render(screen)
             #  принятие и обработка событий
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -134,7 +144,16 @@ class LevelHub:
                     coords = LEVEL_HUB_BUTTONS_COORDINATES
 
                     #  координаты кнопки паузы
-                    pause_btn_cord = PAUSE_BUTTON_COORDINATES
+                    pause_cords = PAUSE_BUTTON_COORDINATES
+
+                    #  координаты магазина оружия
+                    gun_shop = GUN_MAGAZINE
+
+                    #  координаты магазина еды
+                    food_shop = FOOD_MAGAZINE
+
+                    #  координаты магазина умений
+                    skill_shop = SKILLS_MAGAZINE
 
                     #  отлов наведения мышки на кнопки
                     if event.type == pg.MOUSEMOTION:
@@ -190,11 +209,32 @@ class LevelHub:
                             self.basic_level_names_list[7][0] = 98
 
                         #  отлов наведения на кнопку паузы
-                        if pause_btn_cord[0] < mouse_x < pause_btn_cord[2] and \
-                                pause_btn_cord[1] < mouse_y < pause_btn_cord[3]:
+                        if pause_cords[0] < mouse_x < pause_cords[2] and \
+                                pause_cords[1] < mouse_y < pause_cords[3]:
                             self.pause_button_frame = 176
                         else:
                             self.pause_button_frame = 175
+
+                        #  отлов наведения на магазин оружия
+                        if gun_shop[0] < mouse_x < gun_shop[2] and \
+                                gun_shop[1] < mouse_y < gun_shop[3]:
+                            self.visible_guns = True
+                        else:
+                            self.visible_guns = False
+
+                        #  отлов наведения на магазин еды
+                        if food_shop[0] < mouse_x < food_shop[2] and \
+                                food_shop[1] < mouse_y < food_shop[3]:
+                            self.visible_food = True
+                        else:
+                            self.visible_food = False
+
+                        #  отлов наведения на магазин умений
+                        if skill_shop[0] < mouse_x < skill_shop[2] and \
+                                skill_shop[1] < mouse_y < skill_shop[3]:
+                            self.visible_skills = True
+                        else:
+                            self.visible_skills = False
 
                     #  отлов нажатия мышки на кнопки
                     if event.type == pg.MOUSEBUTTONDOWN:
@@ -250,11 +290,32 @@ class LevelHub:
                             self.basic_level_names_list[7][0] = 98
 
                         #  отлов нажатия на кнопку паузы
-                        if pause_btn_cord[0] < mouse_x < pause_btn_cord[2] and \
-                                pause_btn_cord[1] < mouse_y < pause_btn_cord[3]:
+                        if pause_cords[0] < mouse_x < pause_cords[2] and \
+                                pause_cords[1] < mouse_y < pause_cords[3]:
                             self.pause_button_frame = 177
                         else:
                             self.pause_button_frame = 175
+
+                        #  отлов нажатия на магазин оружия
+                        if gun_shop[0] < mouse_x < gun_shop[2] and \
+                                gun_shop[1] < mouse_y < gun_shop[3]:
+                            self.visible_guns = True
+                        else:
+                            self.visible_guns = False
+
+                        #  отлов нажатия на магазин еды
+                        if food_shop[0] < mouse_x < food_shop[2] and \
+                                food_shop[1] < mouse_y < food_shop[3]:
+                            self.visible_food = True
+                        else:
+                            self.visible_food = False
+
+                        #  отлов нажатия на магазин умений
+                        if skill_shop[0] < mouse_x < skill_shop[2] and \
+                                skill_shop[1] < mouse_y < skill_shop[3]:
+                            self.visible_skills = True
+                        else:
+                            self.visible_skills = False
 
                     #  отлов отжатия мышки
                     if event.type == pg.MOUSEBUTTONUP:
@@ -310,11 +371,32 @@ class LevelHub:
                             self.basic_level_names_list[7][0] = 98
 
                         #  отлов отжатия кнопки паузы
-                        if pause_btn_cord[0] < mouse_x < pause_btn_cord[2] and \
-                                pause_btn_cord[1] < mouse_y < pause_btn_cord[3]:
+                        if pause_cords[0] < mouse_x < pause_cords[2] and \
+                                pause_cords[1] < mouse_y < pause_cords[3]:
                             self.pause_button_frame = 176
                         else:
                             self.pause_button_frame = 175
+
+                        #  отлов отжатия магазина оружия
+                        if gun_shop[0] < mouse_x < gun_shop[2] and \
+                                gun_shop[1] < mouse_y < gun_shop[3]:
+                            self.visible_guns = True
+                        else:
+                            self.visible_guns = False
+
+                        #  отлов отжатия магазина еды
+                        if food_shop[0] < mouse_x < food_shop[2] and \
+                                food_shop[1] < mouse_y < food_shop[3]:
+                            self.visible_food = True
+                        else:
+                            self.visible_food = False
+
+                        #  отлов отжатия магазина умений
+                        if skill_shop[0] < mouse_x < skill_shop[2] and \
+                                skill_shop[1] < mouse_y < skill_shop[3]:
+                            self.visible_skills = True
+                        else:
+                            self.visible_skills = False
 
             #  задержка
             self.clock.tick(self.fps)
@@ -359,3 +441,17 @@ class LevelHub:
         font = pg.font.SysFont('agencyfb', 40)
         text = font.render(f'{self.money}', True, (200, 200, 200))
         screen.blit(text, (MONEY_PLACE[0], MONEY_PLACE[1]))
+
+    def shops_render(self, screen):
+        if self.visible_guns:
+            screen.blit(func.load_image(PATHS[179])[0],
+                        func.load_image(PATHS[179])[1])
+        elif self.visible_food:
+            screen.blit(func.load_image(PATHS[180])[0],
+                        func.load_image(PATHS[180])[1])
+        elif self.visible_skills:
+            screen.blit(func.load_image(PATHS[181])[0],
+                        func.load_image(PATHS[181])[1])
+        else:
+            screen.blit(func.load_image(PATHS[182])[0],
+                        func.load_image(PATHS[182])[1])
