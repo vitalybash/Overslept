@@ -8,10 +8,15 @@ from developers_settings import *
 class LevelHub:
 
     def __init__(self):
-        #  некоторый показатель
-        #  уровней который мы будем
+        #  некоторые показатели
+        #  уровней которые мы будем
         #  брать из текущего сохранения
-        self.levels_had_been_done = 3
+        self.levels_had_been_done = 8
+        ''' ^ Если хочется посмотреть на отображение конкретных уровней'''
+        self.health = 100
+        ''' ^ Если хочется посмотреть на отображение здоровья'''
+        self.money = 100
+        ''' ^ Если хочется посмотреть на отображение количества денег'''
 
         self.clock = pg.time.Clock()
         self.fps = 10
@@ -111,6 +116,7 @@ class LevelHub:
                 if i[1]:
                     screen.blit(func.load_image(PATHS[i[0]])[0],
                                 func.load_image(PATHS[i[0]])[1])
+        self.health_bar_render(screen)
 
     def run(self, screen):
         running = True
@@ -306,3 +312,14 @@ class LevelHub:
             if i[1]:
                 screen.blit(func.load_image(PATHS[i[0]])[0],
                             func.load_image(PATHS[i[0]])[1])
+
+    def health_bar_render(self, screen):
+        health_level = self.health // 10
+        health_frame = 163 + health_level
+        if self.health == 0:
+            health_frame = 164
+        screen.blit(func.load_image(PATHS[health_frame])[0],
+                    func.load_image(PATHS[health_frame])[1])
+        font = pg.font.SysFont('agencyfb', 40)
+        text = font.render(f'{self.health}', True, (250, 250, 250))
+        screen.blit(text, (HEALTH_PLACE[0], HEALTH_PLACE[1]))
