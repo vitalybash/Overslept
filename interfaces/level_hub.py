@@ -1,4 +1,5 @@
 import pygame as pg
+import sys
 
 import basic_functions as func
 from developers_settings import *
@@ -19,7 +20,7 @@ class LevelHub:
         self.money = 100
         ''' ^ Если хочется посмотреть на отображение количества денег'''
         self.clock = pg.time.Clock()
-        self.fps = 10
+        self.fps = 60
         #  кратность начального кадра теней и света
         self.number_of_frame = 3
         #  начальный кадр всех надписей уровня
@@ -144,6 +145,9 @@ class LevelHub:
                     running = False
                     # Остановка музыки карты
                     music_map.stop()
+                    # Остановка работы pygame и программы
+                    pg.quit()
+                    sys.exit()
                 if self.all_levels_already_here:
 
                     #  координаты названий уровней
