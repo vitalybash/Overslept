@@ -148,6 +148,12 @@ class LevelHub:
                     # Остановка работы pygame и программы
                     pg.quit()
                     sys.exit()
+
+                if event.type == pg.KEYDOWN:
+                    # Обработчик клавиш
+                    if event.key == pg.K_ESCAPE:
+                        running = False
+
                 if self.all_levels_already_here:
 
                     #  координаты названий уровней
