@@ -4,6 +4,7 @@ import sys
 import basic_functions as func
 from developers_settings import *
 from music.music import Music
+from interfaces.level import Level
 
 
 #  Класс отвечающий за реализацию хаба уровней и всего что с ним звязанно
@@ -73,15 +74,21 @@ class LevelHub:
         self.visible_food = False
         #  флаг появления магазина умений
         self.visible_skills = False
+        #  тригер паузы
+        self.pause_trigger = False
 
     def render_map(self, screen):
         #  установка фона
         screen.blit(func.load_image(PATHS[32])[0],
                     func.load_image(PATHS[32])[1])
         #  установление порядкового номера кадра для теней и света
-        self.number_of_frame = self.number_of_frame % 3 + 1
-        frame_for_shadow = 33 + self.number_of_frame
-        frame_for_light = 37 + self.number_of_frame
+        if not self.pause_trigger:
+            self.number_of_frame = self.number_of_frame % 3 + 1
+            frame_for_shadow = 33 + self.number_of_frame
+            frame_for_light = 37 + self.number_of_frame
+        else:
+            frame_for_shadow = 34
+            frame_for_light = 38
         #  установка теней
         screen.blit(func.load_image(PATHS[frame_for_shadow])[0],
                     func.load_image(PATHS[frame_for_shadow])[1])
@@ -131,6 +138,7 @@ class LevelHub:
         # Установка музыки карты
         music_map = Music('map_melody.ogg')
         music_map.run()
+        pause_condition = 0
         running = True
         while running:
             #  отрисовка карты уровней и уровня здоровья
@@ -138,7 +146,14 @@ class LevelHub:
             #  отрисовка баланса и кнопки паузы
             self.money_and_pauseBtn_render(screen)
             #  отрисовка отображения магазинов
-            self.shops_render(screen)
+            if not self.pause_trigger:
+                self.shops_render(screen)
+            #  отслеживание потребности в паузе
+            if self.pause_trigger:
+                self.render_pause(screen, pause_condition)
+            #  значение кнопки
+            button = None
+
             #  принятие и обработка событий
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -162,6 +177,15 @@ class LevelHub:
                     #  координаты кнопки паузы
                     pause_cords = PAUSE_BUTTON_COORDINATES
 
+                    #  координаты кнопок в меню паузы
+
+                    #  продолжить
+                    pause_play = PAUSE_PLAY_BUTTON
+                    #  сохраниться
+                    pause_save = PAUSE_SAVE_BUTTON
+                    #  выйти
+                    pause_exit = PAUSE_EXIT_BUTTON
+
                     #  координаты магазина оружия
                     gun_shop = GUN_MAGAZINE
 
@@ -171,252 +195,319 @@ class LevelHub:
                     #  координаты магазина умений
                     skill_shop = SKILLS_MAGAZINE
 
-                    #  отлов наведения мышки на кнопки
-                    if event.type == pg.MOUSEMOTION:
-                        mouse_x, mouse_y = event.pos
+                    #  проверка нажатой паузы
+                    if not self.pause_trigger:
+                        #  отлов наведения мышки на кнопки
+                        if event.type == pg.MOUSEMOTION:
+                            mouse_x, mouse_y = event.pos
 
-                        #  проверка наведения на "пионер"
-                        if coords[0][0] < mouse_x < coords[0][2] and \
-                                coords[0][1] < mouse_y < coords[0][3]:
-                            self.basic_level_names_list[0][0] = 48
-                        else:
-                            self.basic_level_names_list[0][0] = 47
-                        #  проверка наведения на "крест"
-                        if coords[1][0] < mouse_x < coords[1][2] and \
-                                coords[1][1] < mouse_y < coords[1][3]:
-                            self.basic_level_names_list[1][0] = 55
-                        else:
-                            self.basic_level_names_list[1][0] = 54
-                        #  проверка наведения на "книжный"
-                        if coords[2][0] < mouse_x < coords[2][2] and \
-                                coords[2][1] < mouse_y < coords[2][3]:
-                            self.basic_level_names_list[2][0] = 64
-                        else:
-                            self.basic_level_names_list[2][0] = 63
-                        #  проверка наведения на "спорт"
-                        if coords[3][0] < mouse_x < coords[3][2] and \
-                                coords[3][1] < mouse_y < coords[3][3]:
-                            self.basic_level_names_list[3][0] = 71
-                        else:
-                            self.basic_level_names_list[3][0] = 70
-                        #  проверка наведения на "мойка"
-                        if coords[4][0] < mouse_x < coords[4][2] and \
-                                coords[4][1] < mouse_y < coords[4][3]:
-                            self.basic_level_names_list[4][0] = 78
-                        else:
-                            self.basic_level_names_list[4][0] = 77
-                        #  проверка наведения на "спас"
-                        if coords[5][0] < mouse_x < coords[5][2] and \
-                                coords[5][1] < mouse_y < coords[5][3]:
-                            self.basic_level_names_list[5][0] = 84
-                        else:
-                            self.basic_level_names_list[5][0] = 83
-                        #  проверка наведения на "фрунзе"
-                        if coords[6][0] < mouse_x < coords[6][2] and \
-                                coords[6][1] < mouse_y < coords[6][3]:
-                            self.basic_level_names_list[6][0] = 92
-                        else:
-                            self.basic_level_names_list[6][0] = 91
-                        #  проверка наведения на "врата"
-                        if coords[7][0] < mouse_x < coords[7][2] and \
-                                coords[7][1] < mouse_y < coords[7][3]:
-                            self.basic_level_names_list[7][0] = 99
-                        else:
-                            self.basic_level_names_list[7][0] = 98
+                            #  проверка наведения на "пионер"
+                            if coords[0][0] < mouse_x < coords[0][2] and \
+                                    coords[0][1] < mouse_y < coords[0][3]:
+                                self.basic_level_names_list[0][0] = 48
+                            else:
+                                self.basic_level_names_list[0][0] = 47
+                            #  проверка наведения на "крест"
+                            if coords[1][0] < mouse_x < coords[1][2] and \
+                                    coords[1][1] < mouse_y < coords[1][3]:
+                                self.basic_level_names_list[1][0] = 55
+                            else:
+                                self.basic_level_names_list[1][0] = 54
+                            #  проверка наведения на "книжный"
+                            if coords[2][0] < mouse_x < coords[2][2] and \
+                                    coords[2][1] < mouse_y < coords[2][3]:
+                                self.basic_level_names_list[2][0] = 64
+                            else:
+                                self.basic_level_names_list[2][0] = 63
+                            #  проверка наведения на "спорт"
+                            if coords[3][0] < mouse_x < coords[3][2] and \
+                                    coords[3][1] < mouse_y < coords[3][3]:
+                                self.basic_level_names_list[3][0] = 71
+                            else:
+                                self.basic_level_names_list[3][0] = 70
+                            #  проверка наведения на "мойка"
+                            if coords[4][0] < mouse_x < coords[4][2] and \
+                                    coords[4][1] < mouse_y < coords[4][3]:
+                                self.basic_level_names_list[4][0] = 78
+                            else:
+                                self.basic_level_names_list[4][0] = 77
+                            #  проверка наведения на "спас"
+                            if coords[5][0] < mouse_x < coords[5][2] and \
+                                    coords[5][1] < mouse_y < coords[5][3]:
+                                self.basic_level_names_list[5][0] = 84
+                            else:
+                                self.basic_level_names_list[5][0] = 83
+                            #  проверка наведения на "фрунзе"
+                            if coords[6][0] < mouse_x < coords[6][2] and \
+                                    coords[6][1] < mouse_y < coords[6][3]:
+                                self.basic_level_names_list[6][0] = 92
+                            else:
+                                self.basic_level_names_list[6][0] = 91
+                            #  проверка наведения на "врата"
+                            if coords[7][0] < mouse_x < coords[7][2] and \
+                                    coords[7][1] < mouse_y < coords[7][3]:
+                                self.basic_level_names_list[7][0] = 99
+                            else:
+                                self.basic_level_names_list[7][0] = 98
 
-                        #  отлов наведения на кнопку паузы
-                        if pause_cords[0] < mouse_x < pause_cords[2] and \
-                                pause_cords[1] < mouse_y < pause_cords[3]:
-                            self.pause_button_frame = 176
-                        else:
-                            self.pause_button_frame = 175
+                            #  отлов наведения на кнопку паузы
+                            if pause_cords[0] < mouse_x < pause_cords[2] and \
+                                    pause_cords[1] < mouse_y < pause_cords[3]:
+                                self.pause_button_frame = 176
+                            else:
+                                self.pause_button_frame = 175
 
-                        #  отлов наведения на магазин оружия
-                        if gun_shop[0] < mouse_x < gun_shop[2] and \
-                                gun_shop[1] < mouse_y < gun_shop[3]:
-                            self.visible_guns = True
-                        else:
-                            self.visible_guns = False
+                            #  отлов наведения на магазин оружия
+                            if gun_shop[0] < mouse_x < gun_shop[2] and \
+                                    gun_shop[1] < mouse_y < gun_shop[3]:
+                                self.visible_guns = True
+                            else:
+                                self.visible_guns = False
 
-                        #  отлов наведения на магазин еды
-                        if food_shop[0] < mouse_x < food_shop[2] and \
-                                food_shop[1] < mouse_y < food_shop[3]:
-                            self.visible_food = True
-                        else:
-                            self.visible_food = False
+                            #  отлов наведения на магазин еды
+                            if food_shop[0] < mouse_x < food_shop[2] and \
+                                    food_shop[1] < mouse_y < food_shop[3]:
+                                self.visible_food = True
+                            else:
+                                self.visible_food = False
 
-                        #  отлов наведения на магазин умений
-                        if skill_shop[0] < mouse_x < skill_shop[2] and \
-                                skill_shop[1] < mouse_y < skill_shop[3]:
-                            self.visible_skills = True
-                        else:
-                            self.visible_skills = False
+                            #  отлов наведения на магазин умений
+                            if skill_shop[0] < mouse_x < skill_shop[2] and \
+                                    skill_shop[1] < mouse_y < skill_shop[3]:
+                                self.visible_skills = True
+                            else:
+                                self.visible_skills = False
 
-                    #  отлов нажатия мышки на кнопки
-                    if event.type == pg.MOUSEBUTTONDOWN:
-                        mouse_x, mouse_y = event.pos
+                        #  отлов нажатия мышки на кнопки
+                        if event.type == pg.MOUSEBUTTONDOWN:
+                            mouse_x, mouse_y = event.pos
 
-                        #  проверка нажатия на "пионер"
-                        if coords[0][0] < mouse_x < coords[0][2] and \
-                                coords[0][1] < mouse_y < coords[0][3]:
-                            self.basic_level_names_list[0][0] = 49
-                        else:
-                            self.basic_level_names_list[0][0] = 47
-                        #  проверка нажатия на "крест"
-                        if coords[1][0] < mouse_x < coords[1][2] and \
-                                coords[1][1] < mouse_y < coords[1][3]:
-                            self.basic_level_names_list[1][0] = 56
-                        else:
-                            self.basic_level_names_list[1][0] = 54
-                        #  проверка нажатия на "книжный"
-                        if coords[2][0] < mouse_x < coords[2][2] and \
-                                coords[2][1] < mouse_y < coords[2][3]:
-                            self.basic_level_names_list[2][0] = 65
-                        else:
-                            self.basic_level_names_list[2][0] = 63
-                        #  проверка нажатия на "спорт"
-                        if coords[3][0] < mouse_x < coords[3][2] and \
-                                coords[3][1] < mouse_y < coords[3][3]:
-                            self.basic_level_names_list[3][0] = 72
-                        else:
-                            self.basic_level_names_list[3][0] = 70
-                        #  проверка нажатия на "мойка"
-                        if coords[4][0] < mouse_x < coords[4][2] and \
-                                coords[4][1] < mouse_y < coords[4][3]:
-                            self.basic_level_names_list[4][0] = 79
-                        else:
-                            self.basic_level_names_list[4][0] = 77
-                        #  проверка нажатия на "спас"
-                        if coords[5][0] < mouse_x < coords[5][2] and \
-                                coords[5][1] < mouse_y < coords[5][3]:
-                            self.basic_level_names_list[5][0] = 85
-                        else:
-                            self.basic_level_names_list[5][0] = 83
-                        #  проверка нажатия на "фрунзе"
-                        if coords[6][0] < mouse_x < coords[6][2] and \
-                                coords[6][1] < mouse_y < coords[6][3]:
-                            self.basic_level_names_list[6][0] = 93
-                        else:
-                            self.basic_level_names_list[6][0] = 91
-                        #  проверка нажатия на "врата"
-                        if coords[7][0] < mouse_x < coords[7][2] and \
-                                coords[7][1] < mouse_y < coords[7][3]:
-                            self.basic_level_names_list[7][0] = 100
-                        else:
-                            self.basic_level_names_list[7][0] = 98
+                            #  проверка нажатия на "пионер"
+                            if coords[0][0] < mouse_x < coords[0][2] and \
+                                    coords[0][1] < mouse_y < coords[0][3]:
+                                self.basic_level_names_list[0][0] = 49
+                            else:
+                                self.basic_level_names_list[0][0] = 47
+                            #  проверка нажатия на "крест"
+                            if coords[1][0] < mouse_x < coords[1][2] and \
+                                    coords[1][1] < mouse_y < coords[1][3]:
+                                self.basic_level_names_list[1][0] = 56
+                            else:
+                                self.basic_level_names_list[1][0] = 54
+                            #  проверка нажатия на "книжный"
+                            if coords[2][0] < mouse_x < coords[2][2] and \
+                                    coords[2][1] < mouse_y < coords[2][3]:
+                                self.basic_level_names_list[2][0] = 65
+                            else:
+                                self.basic_level_names_list[2][0] = 63
+                            #  проверка нажатия на "спорт"
+                            if coords[3][0] < mouse_x < coords[3][2] and \
+                                    coords[3][1] < mouse_y < coords[3][3]:
+                                self.basic_level_names_list[3][0] = 72
+                            else:
+                                self.basic_level_names_list[3][0] = 70
+                            #  проверка нажатия на "мойка"
+                            if coords[4][0] < mouse_x < coords[4][2] and \
+                                    coords[4][1] < mouse_y < coords[4][3]:
+                                self.basic_level_names_list[4][0] = 79
+                            else:
+                                self.basic_level_names_list[4][0] = 77
+                            #  проверка нажатия на "спас"
+                            if coords[5][0] < mouse_x < coords[5][2] and \
+                                    coords[5][1] < mouse_y < coords[5][3]:
+                                self.basic_level_names_list[5][0] = 85
+                            else:
+                                self.basic_level_names_list[5][0] = 83
+                            #  проверка нажатия на "фрунзе"
+                            if coords[6][0] < mouse_x < coords[6][2] and \
+                                    coords[6][1] < mouse_y < coords[6][3]:
+                                self.basic_level_names_list[6][0] = 93
+                            else:
+                                self.basic_level_names_list[6][0] = 91
+                            #  проверка нажатия на "врата"
+                            if coords[7][0] < mouse_x < coords[7][2] and \
+                                    coords[7][1] < mouse_y < coords[7][3]:
+                                self.basic_level_names_list[7][0] = 100
+                            else:
+                                self.basic_level_names_list[7][0] = 98
 
-                        #  отлов нажатия на кнопку паузы
-                        if pause_cords[0] < mouse_x < pause_cords[2] and \
-                                pause_cords[1] < mouse_y < pause_cords[3]:
-                            self.pause_button_frame = 177
-                        else:
-                            self.pause_button_frame = 175
+                            #  отлов нажатия на кнопку паузы
+                            if pause_cords[0] < mouse_x < pause_cords[2] and \
+                                    pause_cords[1] < mouse_y < pause_cords[3]:
+                                self.pause_button_frame = 177
+                            else:
+                                self.pause_button_frame = 175
 
-                        #  отлов нажатия на магазин оружия
-                        if gun_shop[0] < mouse_x < gun_shop[2] and \
-                                gun_shop[1] < mouse_y < gun_shop[3]:
-                            self.visible_guns = True
-                        else:
-                            self.visible_guns = False
+                            #  отлов нажатия на магазин оружия
+                            if gun_shop[0] < mouse_x < gun_shop[2] and \
+                                    gun_shop[1] < mouse_y < gun_shop[3]:
+                                self.visible_guns = True
+                            else:
+                                self.visible_guns = False
 
-                        #  отлов нажатия на магазин еды
-                        if food_shop[0] < mouse_x < food_shop[2] and \
-                                food_shop[1] < mouse_y < food_shop[3]:
-                            self.visible_food = True
-                        else:
-                            self.visible_food = False
+                            #  отлов нажатия на магазин еды
+                            if food_shop[0] < mouse_x < food_shop[2] and \
+                                    food_shop[1] < mouse_y < food_shop[3]:
+                                self.visible_food = True
+                            else:
+                                self.visible_food = False
 
-                        #  отлов нажатия на магазин умений
-                        if skill_shop[0] < mouse_x < skill_shop[2] and \
-                                skill_shop[1] < mouse_y < skill_shop[3]:
-                            self.visible_skills = True
-                        else:
-                            self.visible_skills = False
+                            #  отлов нажатия на магазин умений
+                            if skill_shop[0] < mouse_x < skill_shop[2] and \
+                                    skill_shop[1] < mouse_y < skill_shop[3]:
+                                self.visible_skills = True
+                            else:
+                                self.visible_skills = False
 
-                    #  отлов отжатия мышки
+                        #  отлов отжатия мышки
+                        if event.type == pg.MOUSEBUTTONUP:
+                            mouse_x, mouse_y = event.pos
+
+                            #  проверка отжатия "пионер"
+                            if coords[0][0] < mouse_x < coords[0][2] and \
+                                    coords[0][1] < mouse_y < coords[0][3]:
+                                self.basic_level_names_list[0][0] = 48
+                                button = 1
+                            else:
+                                self.basic_level_names_list[0][0] = 47
+                            #  проверка отжатия "крест"
+                            if coords[1][0] < mouse_x < coords[1][2] and \
+                                    coords[1][1] < mouse_y < coords[1][3]:
+                                self.basic_level_names_list[1][0] = 55
+                            else:
+                                self.basic_level_names_list[1][0] = 54
+                            #  проверка отжатия "книжный"
+                            if coords[2][0] < mouse_x < coords[2][2] and \
+                                    coords[2][1] < mouse_y < coords[2][3]:
+                                self.basic_level_names_list[2][0] = 64
+                            else:
+                                self.basic_level_names_list[2][0] = 63
+                            #  проверка отжатия "спорт"
+                            if coords[3][0] < mouse_x < coords[3][2] and \
+                                    coords[3][1] < mouse_y < coords[3][3]:
+                                self.basic_level_names_list[3][0] = 71
+                            else:
+                                self.basic_level_names_list[3][0] = 70
+                            #  проверка отжатия "мойка"
+                            if coords[4][0] < mouse_x < coords[4][2] and \
+                                    coords[4][1] < mouse_y < coords[4][3]:
+                                self.basic_level_names_list[4][0] = 78
+                            else:
+                                self.basic_level_names_list[4][0] = 77
+                            #  проверка отжатия "спас"
+                            if coords[5][0] < mouse_x < coords[5][2] and \
+                                    coords[5][1] < mouse_y < coords[5][3]:
+                                self.basic_level_names_list[5][0] = 84
+                            else:
+                                self.basic_level_names_list[5][0] = 83
+                            #  проверка отжатия "фрунзе"
+                            if coords[6][0] < mouse_x < coords[6][2] and \
+                                    coords[6][1] < mouse_y < coords[6][3]:
+                                self.basic_level_names_list[6][0] = 92
+                            else:
+                                self.basic_level_names_list[6][0] = 91
+                            #  проверка отжатия "врата"
+                            if coords[7][0] < mouse_x < coords[7][2] and \
+                                    coords[7][1] < mouse_y < coords[7][3]:
+                                self.basic_level_names_list[7][0] = 99
+                            else:
+                                self.basic_level_names_list[7][0] = 98
+
+                            #  отлов отжатия кнопки паузы
+                            if pause_cords[0] < mouse_x < pause_cords[2] and \
+                                    pause_cords[1] < mouse_y < pause_cords[3]:
+                                self.pause_button_frame = 176
+                                self.pause_trigger = True
+                            else:
+                                self.pause_button_frame = 175
+
+                            #  отлов отжатия магазина оружия
+                            if gun_shop[0] < mouse_x < gun_shop[2] and \
+                                    gun_shop[1] < mouse_y < gun_shop[3]:
+                                self.visible_guns = True
+                            else:
+                                self.visible_guns = False
+
+                            #  отлов отжатия магазина еды
+                            if food_shop[0] < mouse_x < food_shop[2] and \
+                                    food_shop[1] < mouse_y < food_shop[3]:
+                                self.visible_food = True
+                            else:
+                                self.visible_food = False
+
+                            #  отлов отжатия магазина умений
+                            if skill_shop[0] < mouse_x < skill_shop[2] and \
+                                    skill_shop[1] < mouse_y < skill_shop[3]:
+                                self.visible_skills = True
+                            else:
+                                self.visible_skills = False
+
+                    if self.pause_trigger:
+                        if event.type == pg.QUIT:
+                            self.pause_trigger = False
+
+                        if event.type == pg.MOUSEMOTION:
+                            mouse_x, mouse_y = event.pos
+
+                            #  отслеживание наведения продолжить
+                            if pause_play[0] < mouse_x < pause_play[2] and \
+                                    pause_play[1] < mouse_y < pause_play[3]:
+                                pause_condition = 1
+                            #  отслеживание наведения сохраниться
+                            elif pause_save[0] < mouse_x < pause_save[2] and \
+                                    pause_save[1] < mouse_y < pause_save[3]:
+                                pause_condition = 3
+                            #  отслеживание наведения выход
+                            elif pause_exit[0] < mouse_x < pause_exit[2] and \
+                                    pause_exit[1] < mouse_y < pause_exit[3]:
+                                pause_condition = 5
+                            else:
+                                pause_condition = 0
+
+                        if event.type == pg.MOUSEBUTTONDOWN:
+                            mouse_x, mouse_y = event.pos
+
+                            #  отслеживание нажатия продолжить
+                            if pause_play[0] < mouse_x < pause_play[2] and \
+                                    pause_play[1] < mouse_y < pause_play[3]:
+                                pause_condition = 2
+                            #  отслеживание нажатия сохраниться
+                            elif pause_save[0] < mouse_x < pause_save[2] and \
+                                    pause_save[1] < mouse_y < pause_save[3]:
+                                pause_condition = 4
+                            #  отслеживание нажатия выход
+                            elif pause_exit[0] < mouse_x < pause_exit[2] and \
+                                    pause_exit[1] < mouse_y < pause_exit[3]:
+                                pause_condition = 6
+                            else:
+                                pause_condition = 0
+
                     if event.type == pg.MOUSEBUTTONUP:
                         mouse_x, mouse_y = event.pos
 
-                        #  проверка отжатия "пионер"
-                        if coords[0][0] < mouse_x < coords[0][2] and \
-                                coords[0][1] < mouse_y < coords[0][3]:
-                            self.basic_level_names_list[0][0] = 48
+                        #  отслеживание отжатия продолжить
+                        if pause_play[0] < mouse_x < pause_play[2] and \
+                                pause_play[1] < mouse_y < pause_play[3]:
+                            pause_condition = 1
+                            self.pause_trigger = False
+                        #  отслеживание отжатия сохраниться
+                        elif pause_save[0] < mouse_x < pause_save[2] and \
+                                pause_save[1] < mouse_y < pause_save[3]:
+                            pause_condition = 3
+                        #  отслеживание отжатия выход
+                        elif pause_exit[0] < mouse_x < pause_exit[2] and \
+                                pause_exit[1] < mouse_y < pause_exit[3]:
+                            pause_condition = 5
+                            running = False
                         else:
-                            self.basic_level_names_list[0][0] = 47
-                        #  проверка отжатия "крест"
-                        if coords[1][0] < mouse_x < coords[1][2] and \
-                                coords[1][1] < mouse_y < coords[1][3]:
-                            self.basic_level_names_list[1][0] = 55
-                        else:
-                            self.basic_level_names_list[1][0] = 54
-                        #  проверка отжатия "книжный"
-                        if coords[2][0] < mouse_x < coords[2][2] and \
-                                coords[2][1] < mouse_y < coords[2][3]:
-                            self.basic_level_names_list[2][0] = 64
-                        else:
-                            self.basic_level_names_list[2][0] = 63
-                        #  проверка отжатия "спорт"
-                        if coords[3][0] < mouse_x < coords[3][2] and \
-                                coords[3][1] < mouse_y < coords[3][3]:
-                            self.basic_level_names_list[3][0] = 71
-                        else:
-                            self.basic_level_names_list[3][0] = 70
-                        #  проверка отжатия "мойка"
-                        if coords[4][0] < mouse_x < coords[4][2] and \
-                                coords[4][1] < mouse_y < coords[4][3]:
-                            self.basic_level_names_list[4][0] = 78
-                        else:
-                            self.basic_level_names_list[4][0] = 77
-                        #  проверка отжатия "спас"
-                        if coords[5][0] < mouse_x < coords[5][2] and \
-                                coords[5][1] < mouse_y < coords[5][3]:
-                            self.basic_level_names_list[5][0] = 84
-                        else:
-                            self.basic_level_names_list[5][0] = 83
-                        #  проверка отжатия "фрунзе"
-                        if coords[6][0] < mouse_x < coords[6][2] and \
-                                coords[6][1] < mouse_y < coords[6][3]:
-                            self.basic_level_names_list[6][0] = 92
-                        else:
-                            self.basic_level_names_list[6][0] = 91
-                        #  проверка отжатия "врата"
-                        if coords[7][0] < mouse_x < coords[7][2] and \
-                                coords[7][1] < mouse_y < coords[7][3]:
-                            self.basic_level_names_list[7][0] = 99
-                        else:
-                            self.basic_level_names_list[7][0] = 98
-
-                        #  отлов отжатия кнопки паузы
-                        if pause_cords[0] < mouse_x < pause_cords[2] and \
-                                pause_cords[1] < mouse_y < pause_cords[3]:
-                            self.pause_button_frame = 176
-                        else:
-                            self.pause_button_frame = 175
-
-                        #  отлов отжатия магазина оружия
-                        if gun_shop[0] < mouse_x < gun_shop[2] and \
-                                gun_shop[1] < mouse_y < gun_shop[3]:
-                            self.visible_guns = True
-                        else:
-                            self.visible_guns = False
-
-                        #  отлов отжатия магазина еды
-                        if food_shop[0] < mouse_x < food_shop[2] and \
-                                food_shop[1] < mouse_y < food_shop[3]:
-                            self.visible_food = True
-                        else:
-                            self.visible_food = False
-
-                        #  отлов отжатия магазина умений
-                        if skill_shop[0] < mouse_x < skill_shop[2] and \
-                                skill_shop[1] < mouse_y < skill_shop[3]:
-                            self.visible_skills = True
-                        else:
-                            self.visible_skills = False
+                            pause_condition = 0
 
             #  задержка
             self.clock.tick(self.fps)
             pg.display.flip()
+            if button == 1:
+                Level(1).run(screen)
+            #  проверка нажатия на паузу
 
     def names_render(self, screen):
         if self.level_names_frame == 47:
@@ -471,3 +562,30 @@ class LevelHub:
         else:
             screen.blit(func.load_image(PATHS[182])[0],
                         func.load_image(PATHS[182])[1])
+
+    def render_pause(self, screen, pause_condition):
+        if pause_condition == 0:
+            screen.blit(func.load_image(PATHS[184])[0],
+                        func.load_image(PATHS[184])[1])
+        if pause_condition == 1:
+            screen.blit(func.load_image(PATHS[185])[0],
+                        func.load_image(PATHS[185])[1])
+        if pause_condition == 2:
+            screen.blit(func.load_image(PATHS[186])[0],
+                        func.load_image(PATHS[186])[1])
+        if pause_condition == 3:
+            screen.blit(func.load_image(PATHS[187])[0],
+                        func.load_image(PATHS[187])[1])
+        if pause_condition == 4:
+            screen.blit(func.load_image(PATHS[188])[0],
+                        func.load_image(PATHS[188])[1])
+        if pause_condition == 5:
+            screen.blit(func.load_image(PATHS[189])[0],
+                        func.load_image(PATHS[189])[1])
+        if pause_condition == 6:
+            screen.blit(func.load_image(PATHS[190])[0],
+                        func.load_image(PATHS[190])[1])
+        screen.blit(func.load_pause_slider(PAUSE_SLIDER_POSITION1)[0],
+                    func.load_pause_slider(PAUSE_SLIDER_POSITION1)[1])
+        screen.blit(func.load_pause_slider(PAUSE_SLIDER_POSITION2)[0],
+                    func.load_pause_slider(PAUSE_SLIDER_POSITION2)[1])
