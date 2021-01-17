@@ -1,4 +1,5 @@
 import pygame
+from developers_settings import *
 
 
 def load_image(img_path):
@@ -14,3 +15,10 @@ def cut_sheet(sheet, frames, col):
         frame_location = (rect.w * i, 0)
         frames.append(sheet.subsurface(pygame.Rect(
             frame_location, rect.size)))
+
+
+def load_pause_slider(pos):
+    image = pygame.image.load(PATHS[29]).convert_alpha()
+    image = pygame.transform.scale(image, (64, 64))
+    image_rect = image.get_rect(topleft=pos)
+    return [image, image_rect]
