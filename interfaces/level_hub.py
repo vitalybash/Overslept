@@ -76,25 +76,20 @@ class LevelHub:
         self.visible_skills = False
         #  тригер паузы
         self.pause_trigger = False
+        #  подсчёт кадров для смены кадра тени и света
+        self.light_frame = 0
+        #  начальный кадр теней
+        self.frame_for_shadow = 34
+        #  начальный кадр света
+        self.frame_for_light = 38
 
     def render_map(self, screen):
         #  установка фона
         screen.blit(func.load_image(PATHS[32])[0],
                     func.load_image(PATHS[32])[1])
-        #  установление порядкового номера кадра для теней и света
-        if not self.pause_trigger:
-            self.number_of_frame = self.number_of_frame % 3 + 1
-            frame_for_shadow = 33 + self.number_of_frame
-            frame_for_light = 37 + self.number_of_frame
-        else:
-            frame_for_shadow = 34
-            frame_for_light = 38
-        #  установка теней
-        screen.blit(func.load_image(PATHS[frame_for_shadow])[0],
-                    func.load_image(PATHS[frame_for_shadow])[1])
-        #  установка свет
-        screen.blit(func.load_image(PATHS[frame_for_light])[0],
-                    func.load_image(PATHS[frame_for_light])[1])
+
+        #  отрисовка теней и света
+        self.light_render(screen)
 
         #  установка путей
         if not self.ways_already_here_flag:
@@ -133,6 +128,24 @@ class LevelHub:
                     screen.blit(func.load_image(PATHS[i[0]])[0],
                                 func.load_image(PATHS[i[0]])[1])
         self.health_bar_render(screen)
+
+    def light_render(self, screen):
+        if self.light_frame % 6 == 0:
+            #  установление порядкового номера кадра для теней и света
+            if not self.pause_trigger:
+                self.number_of_frame = self.number_of_frame % 3 + 1
+                self.frame_for_shadow = 33 + self.number_of_frame
+                self.frame_for_light = 37 + self.number_of_frame
+            else:
+                self.frame_for_shadow = 34
+                self.frame_for_light = 38
+
+        #  установка теней
+        screen.blit(func.load_image(PATHS[self.frame_for_shadow])[0],
+                    func.load_image(PATHS[self.frame_for_shadow])[1])
+        #  установка свет
+        screen.blit(func.load_image(PATHS[self.frame_for_light])[0],
+                    func.load_image(PATHS[self.frame_for_light])[1])
 
     def run(self, screen):
         # Установка музыки карты
@@ -505,6 +518,7 @@ class LevelHub:
             #  задержка
             self.clock.tick(self.fps)
             pg.display.flip()
+            self.light_frame += 1
             if button == 1:
                 Level(1).run(screen)
             #  проверка нажатия на паузу
@@ -585,11 +599,13 @@ class LevelHub:
         if pause_condition == 6:
             screen.blit(func.load_image(PATHS[190])[0],
                         func.load_image(PATHS[190])[1])
+        screen.blit(func.load_pause_slider_way(PAUSE_SLIDER_WAY_POSITION1)[0],
+                    func.load_pause_slider_way(PAUSE_SLIDER_WAY_POSITION1)[1])
+        screen.blit(func.load_pause_slider_way(PAUSE_SLIDER_WAY_POSITION2)[0],
+                    func.load_pause_slider_way(PAUSE_SLIDER_WAY_POSITION2)[1])
         screen.blit(func.load_pause_slider(PAUSE_SLIDER_POSITION1)[0],
                     func.load_pause_slider(PAUSE_SLIDER_POSITION1)[1])
         screen.blit(func.load_pause_slider(PAUSE_SLIDER_POSITION2)[0],
                     func.load_pause_slider(PAUSE_SLIDER_POSITION2)[1])
-        screen.blit(func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION1)[0],
-                    func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION1)[1])
-        screen.blit(func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION2)[0],
-                    func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION2)[1])
+
+
