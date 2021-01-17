@@ -589,3 +589,7 @@ class LevelHub:
                     func.load_pause_slider(PAUSE_SLIDER_POSITION1)[1])
         screen.blit(func.load_pause_slider(PAUSE_SLIDER_POSITION2)[0],
                     func.load_pause_slider(PAUSE_SLIDER_POSITION2)[1])
+        screen.blit(func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION1)[0],
+                    func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION1)[1])
+        screen.blit(func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION2)[0],
+                    func.load_pause_slider(PAUSE_SLIDER_WAY_POSITION2)[1])

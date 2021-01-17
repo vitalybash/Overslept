@@ -22,3 +22,10 @@ def load_pause_slider(pos):
     image = pygame.transform.scale(image, (64, 64))
     image_rect = image.get_rect(topleft=pos)
     return [image, image_rect]
+
+
+def load_pause_slider_way(pos):
+    image = pygame.image.load(PATHS[28]).convert_alpha()
+    image = pygame.transform.scale(image, (512, 64))
+    image_rect = image.get_rect(topleft=pos)
+    return [image, image_rect]
