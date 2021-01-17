@@ -3,6 +3,7 @@ from developers_settings import *
 from basic_functions import load_image
 from interfaces.level_hub import LevelHub
 from interfaces.save_hub import SaveHub
+from interfaces.settings import Settings
 from music.music import Music
 
 
@@ -112,6 +113,7 @@ class MainMenu:
                     elif coords[2][0] < mouse_x < coords[2][2] and \
                             coords[2][1] < mouse_y < coords[2][3]:
                         self.buttons_condition = PATHS[8]
+                        button = 2  # Кнопка "Настройки"
                     elif coords[3][0] < mouse_x < coords[3][2] and \
                             coords[3][1] < mouse_y < coords[3][3]:
                         self.buttons_condition = PATHS[10]
@@ -130,3 +132,5 @@ class MainMenu:
                 self.music_menu_again.stop()
                 self.music_menu_again_flag = False
                 SaveHub().run(screen)
+            elif button == 2:
+                Settings().run(screen)
