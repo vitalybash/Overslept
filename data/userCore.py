@@ -6,4 +6,4 @@ with open("data/UserSaves.csv", mode='r', encoding='utf8') as saves:
                                              quotechar='"')]
 
 # Переменная выбранного профиля
-profileSave = None
+profileSave = 1  # 1 - default save
