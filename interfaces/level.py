@@ -17,15 +17,14 @@ class Level:
             self.render_level(screen)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    print(1)
                     running = False
             self.clock.tick(self.fps)
             pg.display.flip()
 
     def render_level(self, screen):
         if self.level == 1:
-            if self.frame == 198 or self.frame == 0:
-                self.frame = 192
+            if self.frame == 206 or self.frame == 0:
+                self.frame = 200
             screen.blit(func.load_image(PATHS[self.frame])[0],
                         func.load_image(PATHS[self.frame])[1])
             self.frame += 1

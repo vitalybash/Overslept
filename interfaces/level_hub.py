@@ -20,6 +20,14 @@ class LevelHub:
         ''' ^ Если хочется посмотреть на отображение здоровья'''
         self.money = 100
         ''' ^ Если хочется посмотреть на отображение количества денег'''
+        self.exp_count = 0
+        ''' ^ Счёт опыта игрока'''
+        self.accuracy = 0
+        ''' ^ Уровень меткости'''
+        self.defence = 0
+        ''' ^ Уровень защиты'''
+        self.speed = 0
+        ''' ^ Уровень скорости'''
         self.clock = pg.time.Clock()
         self.fps = 60
         #  кратность начального кадра теней и света
@@ -82,6 +90,8 @@ class LevelHub:
         self.frame_for_shadow = 34
         #  начальный кадр света
         self.frame_for_light = 38
+        #  тригер магазина
+        self.shop_trigger = False
 
     def render_map(self, screen):
         #  установка фона
@@ -152,6 +162,7 @@ class LevelHub:
         music_map = Music('map_melody.ogg')
         music_map.run()
         pause_condition = 0
+        shop_condition = 0
         running = True
         while running:
             #  отрисовка карты уровней и уровня здоровья
@@ -159,11 +170,13 @@ class LevelHub:
             #  отрисовка баланса и кнопки паузы
             self.money_and_pauseBtn_render(screen)
             #  отрисовка отображения магазинов
-            if not self.pause_trigger:
+            if not self.pause_trigger and not self.shop_trigger:
                 self.shops_render(screen)
             #  отслеживание потребности в паузе
             if self.pause_trigger:
                 self.render_pause(screen, pause_condition)
+            if self.shop_trigger:
+                self.exp_shop_render(screen, shop_condition)
             #  значение кнопки
             button = None
 
@@ -208,8 +221,16 @@ class LevelHub:
                     #  координаты магазина умений
                     skill_shop = SKILLS_MAGAZINE
 
+                    #  координаты магазина умения
+                    skill_wnd = SHOP_WND_POSITION
+
+                    #  координаты кнопок магазина умений
+                    acc_btn = ACCURACY_PLACE
+                    def_btn = DEFENCE_PLACE
+                    spe_btn = SPEED_PLACE
+
                     #  проверка нажатой паузы
-                    if not self.pause_trigger:
+                    if not self.pause_trigger and not self.shop_trigger:
                         #  отлов наведения мышки на кнопки
                         if event.type == pg.MOUSEMOTION:
                             mouse_x, mouse_y = event.pos
@@ -452,6 +473,7 @@ class LevelHub:
                             if skill_shop[0] < mouse_x < skill_shop[2] and \
                                     skill_shop[1] < mouse_y < skill_shop[3]:
                                 self.visible_skills = True
+                                self.shop_trigger = True
                             else:
                                 self.visible_skills = False
 
@@ -495,25 +517,87 @@ class LevelHub:
                             else:
                                 pause_condition = 0
 
-                    if event.type == pg.MOUSEBUTTONUP:
-                        mouse_x, mouse_y = event.pos
+                        if event.type == pg.MOUSEBUTTONUP:
+                            mouse_x, mouse_y = event.pos
 
-                        #  отслеживание отжатия продолжить
-                        if pause_play[0] < mouse_x < pause_play[2] and \
-                                pause_play[1] < mouse_y < pause_play[3]:
-                            pause_condition = 1
+                            #  отслеживание отжатия продолжить
+                            if pause_play[0] < mouse_x < pause_play[2] and \
+                                    pause_play[1] < mouse_y < pause_play[3]:
+                                pause_condition = 1
+                                self.pause_trigger = False
+                            #  отслеживание отжатия сохраниться
+                            elif pause_save[0] < mouse_x < pause_save[2] and \
+                                    pause_save[1] < mouse_y < pause_save[3]:
+                                pause_condition = 3
+                            #  отслеживание отжатия выход
+                            elif pause_exit[0] < mouse_x < pause_exit[2] and \
+                                    pause_exit[1] < mouse_y < pause_exit[3]:
+                                pause_condition = 5
+                                running = False
+                            else:
+                                pause_condition = 0
+
+                    if self.shop_trigger:
+                        if event.type == pg.QUIT:
                             self.pause_trigger = False
-                        #  отслеживание отжатия сохраниться
-                        elif pause_save[0] < mouse_x < pause_save[2] and \
-                                pause_save[1] < mouse_y < pause_save[3]:
-                            pause_condition = 3
-                        #  отслеживание отжатия выход
-                        elif pause_exit[0] < mouse_x < pause_exit[2] and \
-                                pause_exit[1] < mouse_y < pause_exit[3]:
-                            pause_condition = 5
-                            running = False
-                        else:
-                            pause_condition = 0
+
+                        if event.type == pg.MOUSEMOTION:
+                            mouse_x, mouse_y = event.pos
+
+                            if skill_wnd[0] < mouse_x < skill_wnd[2] and \
+                                    skill_wnd[1] < mouse_y < skill_wnd[3]:
+
+                                if acc_btn[0] < mouse_x < acc_btn[2] and \
+                                        acc_btn[1] < mouse_y < acc_btn[3]:
+                                    shop_condition = 1
+
+                                if def_btn[0] < mouse_x < def_btn[2] and \
+                                        def_btn[1] < mouse_y < def_btn[3]:
+                                    shop_condition = 3
+
+                                if spe_btn[0] < mouse_x < spe_btn[2] and \
+                                        spe_btn[1] < mouse_y < spe_btn[3]:
+                                    shop_condition = 5
+
+                        if event.type == pg.MOUSEBUTTONDOWN:
+                            mouse_x, mouse_y = event.pos
+
+                            if skill_wnd[0] < mouse_x < skill_wnd[2] and \
+                                    skill_wnd[1] < mouse_y < skill_wnd[3]:
+
+                                if acc_btn[0] < mouse_x < acc_btn[2] and \
+                                        acc_btn[1] < mouse_y < acc_btn[3]:
+                                    shop_condition = 2
+
+                                elif def_btn[0] < mouse_x < def_btn[2] and \
+                                        def_btn[1] < mouse_y < def_btn[3]:
+                                    shop_condition = 4
+
+                                elif spe_btn[0] < mouse_x < spe_btn[2] and \
+                                        spe_btn[1] < mouse_y < spe_btn[3]:
+                                    shop_condition = 6
+                            else:
+                                self.shop_trigger = False
+
+                        if event.type == pg.MOUSEBUTTONUP:
+                            mouse_x, mouse_y = event.pos
+
+                            if skill_wnd[0] < mouse_x < skill_wnd[2] and \
+                                    skill_wnd[1] < mouse_y < skill_wnd[3]:
+
+                                if acc_btn[0] < mouse_x < acc_btn[2] and \
+                                        acc_btn[1] < mouse_y < acc_btn[3]:
+                                    shop_condition = 1
+
+                                if def_btn[0] < mouse_x < def_btn[2] and \
+                                        def_btn[1] < mouse_y < def_btn[3]:
+                                    shop_condition = 3
+
+                                if spe_btn[0] < mouse_x < spe_btn[2] and \
+                                        spe_btn[1] < mouse_y < spe_btn[3]:
+                                    shop_condition = 5
+                                else:
+                                    shop_condition = 0
 
             #  задержка
             self.clock.tick(self.fps)
@@ -576,6 +660,50 @@ class LevelHub:
         else:
             screen.blit(func.load_image(PATHS[182])[0],
                         func.load_image(PATHS[182])[1])
+
+    def exp_shop_render(self, screen, condition):
+        if condition == 0:
+            screen.blit(func.load_image(PATHS[192])[0],
+                        func.load_image(PATHS[192])[1])
+        if condition == 1:
+            screen.blit(func.load_image(PATHS[193])[0],
+                        func.load_image(PATHS[193])[1])
+        if condition == 2:
+            screen.blit(func.load_image(PATHS[194])[0],
+                        func.load_image(PATHS[194])[1])
+        if condition == 3:
+            screen.blit(func.load_image(PATHS[195])[0],
+                        func.load_image(PATHS[195])[1])
+        if condition == 4:
+            screen.blit(func.load_image(PATHS[196])[0],
+                        func.load_image(PATHS[196])[1])
+        if condition == 5:
+            screen.blit(func.load_image(PATHS[197])[0],
+                        func.load_image(PATHS[197])[1])
+        if condition == 6:
+            screen.blit(func.load_image(PATHS[198])[0],
+                        func.load_image(PATHS[198])[1])
+        font = pg.font.SysFont('agencyfb', 27)
+        text = font.render('меткость', True, (250, 250, 250))
+        screen.blit(text, (ACCURACY_NAME[0], ACCURACY_NAME[1]))
+        font = pg.font.SysFont('agencyfb', 27)
+        text = font.render('защита', True, (250, 250, 250))
+        screen.blit(text, (DEFENCE_NAME[0], DEFENCE_NAME[1]))
+        font = pg.font.SysFont('agencyfb', 27)
+        text = font.render('скорость', True, (250, 250, 250))
+        screen.blit(text, (SPEED_NAME[0], SPEED_NAME[1]))
+        font = pg.font.SysFont('agencyfb', 30)
+        text = font.render(f'{self.accuracy}', True, (250, 250, 250))
+        screen.blit(text, (ACCURACY_LVL[0], ACCURACY_LVL[1]))
+        font = pg.font.SysFont('agencyfb', 30)
+        text = font.render(f'{self.defence}', True, (250, 250, 250))
+        screen.blit(text, (DEFENCE_LVL[0], DEFENCE_LVL[1]))
+        font = pg.font.SysFont('agencyfb', 30)
+        text = font.render(f'{self.speed}', True, (250, 250, 250))
+        screen.blit(text, (SPEED_LVL[0], SPEED_LVL[1]))
+        font = pg.font.SysFont('agencyfb', 40)
+        text = font.render(f'{self.exp_count}', True, (250, 250, 250))
+        screen.blit(text, (EXP_BANK[0], EXP_BANK[1]))
 
     def render_pause(self, screen, pause_condition):
         if pause_condition == 0:
