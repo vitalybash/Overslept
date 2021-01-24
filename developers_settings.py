@@ -10,6 +10,11 @@ with open('graphics_paths.csv', mode='r', encoding='utf-8') as in_file:
     PATHS = [path for number, path in reader]
     #  распаковка содержащихся в csv файле путей к кадрам графики
 
+with open('heroes_graphics_paths.csv', mode='r', encoding='utf-8') as in_file:
+    reader = csv.reader(in_file, delimiter=';')
+    HEROES_PATHS = [path for number, path in reader]
+    #  распаковка содержащихся в csv файле путей к кадрам графики героев
+
 MAIN_MENU_PLAY = [256, 208, 764, 276]
 MAIN_MENU_SAVE = [256, 296, 764, 364]
 MAIN_MENU_SETTINGS = [256, 384, 764, 452]
@@ -82,3 +87,9 @@ SHOP_WND_POSITION = [576, 192, 956, 444]
 ACCURACY_PLACE = [596, 276, 696, 424]
 DEFENCE_PLACE = [712, 276, 820, 424]
 SPEED_PLACE = [836, 276, 936, 424]
+
+#  координаты начала сетки уровня
+FIELD_BEGIN_COORDS = [60, 496]
+#  размеры клеток
+CELL_HEIGHT = 20
+CELL_WIDTH = 100
