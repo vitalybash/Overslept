@@ -91,6 +91,14 @@ class Settings:
                                                        (64, 64))
                 self.screen.blit(self.music_slider[0], self.music_slider[1])
 
+    def return_music_volume(self, x, y):
+        """Установка ползунка на дорожке
+           Parameters x, y: int, int
+           Returns music_volume: int
+        """
+        if 220 < y < 230:
+            pass
+
     def button_pressed(self):
         """Если кнопка нажата, то меняет картинку
            Parameter:
