@@ -12,7 +12,7 @@ with open('graphics_paths.csv', mode='r', encoding='utf-8') as in_file:
 
 with open('heroes_graphics_paths.csv', mode='r', encoding='utf-8') as in_file:
     reader = csv.reader(in_file, delimiter=';')
-    HEROES_PATHS = [path for number, path in reader]
+    HEROES_PATHS = [path[1] for path in reader]
     #  распаковка содержащихся в csv файле путей к кадрам графики героев
 
 MAIN_MENU_PLAY = [256, 208, 764, 276]
