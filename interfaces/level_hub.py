@@ -186,6 +186,8 @@ class LevelHub:
                     running = False
                     # Остановка музыки карты
                     music_map.stop()
+                    music_menu = Music('main_menu_melody.ogg')
+                    music_menu.run()
                     # Остановка работы pygame и программы
                     pg.quit()
                     sys.exit()
@@ -194,6 +196,10 @@ class LevelHub:
                     # Обработчик клавиш
                     if event.key == pg.K_ESCAPE:
                         running = False
+                        # Остановка музыки карты
+                        music_map.stop()
+                        music_menu = Music('main_menu_melody.ogg')
+                        music_menu.run()
 
                 if self.all_levels_already_here:
 
@@ -480,6 +486,10 @@ class LevelHub:
                     if self.pause_trigger:
                         if event.type == pg.QUIT:
                             self.pause_trigger = False
+                            # Остановка музыки карты
+                            music_map.stop()
+                            music_menu = Music('main_menu_melody.ogg')
+                            music_menu.run()
 
                         if event.type == pg.MOUSEMOTION:
                             mouse_x, mouse_y = event.pos
@@ -534,12 +544,20 @@ class LevelHub:
                                     pause_exit[1] < mouse_y < pause_exit[3]:
                                 pause_condition = 5
                                 running = False
+                                # Остановка музыки карты
+                                music_map.stop()
+                                music_menu = Music('main_menu_melody.ogg')
+                                music_menu.run()
                             else:
                                 pause_condition = 0
 
                     if self.shop_trigger:
                         if event.type == pg.QUIT:
                             self.pause_trigger = False
+                            # Остановка музыки карты
+                            music_map.stop()
+                            music_menu = Music('main_menu_melody.ogg')
+                            music_menu.run()
 
                         if event.type == pg.MOUSEMOTION:
                             mouse_x, mouse_y = event.pos
@@ -604,6 +622,8 @@ class LevelHub:
             pg.display.flip()
             self.light_frame += 1
             if button == 1:
+                # Остановка музыки карты
+                music_map.stop()
                 Level(1).run(screen)
             #  проверка нажатия на паузу
 

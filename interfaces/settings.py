@@ -96,8 +96,11 @@ class Settings:
            Parameters x, y: int, int
            Returns music_volume: int
         """
+        music_volume = 100
         if 220 < y < 230:
-            pass
+            if 305 <= x <= 349.8:
+                music_volume = 10
+        return music_volume
 
     def button_pressed(self):
         """Если кнопка нажата, то меняет картинку

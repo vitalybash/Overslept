@@ -16,19 +16,13 @@ class MainMenu:
         self.coords = MAIN_MENU_BUTTONS_COORDINATES  # Распаковка координат
         # кнопок
         self.is_pressed = False  # Флаг зажатой клавиши мыши
-        self.music_menu_again = Music('main_menu_melody.ogg')  # Повторное
-        # произведение музыки главного меню
-        self.music_menu_again_flag = True  # Флаг повторного воспроизведения
 
     def run(self, screen):
         """Игровой цикл"""
         running = True
         # Установка музыки главного меню
         music_menu = Music('main_menu_melody.ogg')
-        if self.music_menu_again_flag:
-            music_menu.run()
-        else:
-            music_menu.stop()
+        music_menu.run()
         while running:
             # Установка спрайта фона
             screen.blit(load_image(PATHS[2])[0], load_image(PATHS[2])[1])
@@ -73,10 +67,6 @@ class MainMenu:
                             self.buttons_condition = PATHS[10]
                     else:
                         self.buttons_condition = PATHS[3]
-
-                    # Повторное произведение музыки меню
-                    if not self.music_menu_again_flag:
-                        self.music_menu_again.run()
                 # Обработка нажатия кнопки
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.is_pressed = True
@@ -124,13 +114,8 @@ class MainMenu:
             if button == 0:
                 # Выключение музыки главного меню
                 music_menu.stop()
-                self.music_menu_again.stop()
-                self.music_menu_again_flag = False
                 LevelHub().run(screen)
             elif button == 1:
-                music_menu.stop()
-                self.music_menu_again.stop()
-                self.music_menu_again_flag = False
                 SaveHub().run(screen)
             elif button == 2:
                 Settings().run(screen)
