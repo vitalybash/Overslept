@@ -5,6 +5,7 @@ import basic_functions as func
 from developers_settings import *
 from music.music import Music
 from interfaces.level import Level
+from interfaces.settings import Settings
 
 
 #  Класс отвечающий за реализацию хаба уровней и всего что с ним звязанно
@@ -157,9 +158,10 @@ class LevelHub:
         screen.blit(func.load_image(PATHS[self.frame_for_light])[0],
                     func.load_image(PATHS[self.frame_for_light])[1])
 
-    def run(self, screen):
+    def run(self, screen, music_menu):
         # Установка музыки карты
         music_map = Music('map_melody.ogg')
+        music_map.set_volume(music_menu.get_volume())
         music_map.run()
         pause_condition = 0
         shop_condition = 0

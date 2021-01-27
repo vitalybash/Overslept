@@ -28,7 +28,8 @@ class Settings:
         self.screen.blit(load_image(PATHS[30])[0],
                          load_image(PATHS[30])[1])
         # установка текста и кнопок, ползунков
-        font = pygame.font.SysFont('impact', 40)
+        font = pygame.font.Font(
+            'fonts/comic _sans_ms_pixel_rus_eng.ttf', 40)
         self.screen.blit(font.render('НАСТРОЙКИ', True,
                                      (250, 250, 250)), (420, 62, 188, 572))
         # установка текста и ползунков, относящихся к музыке
@@ -91,33 +92,40 @@ class Settings:
                                                        (64, 64))
                 self.screen.blit(self.music_slider[0], self.music_slider[1])
 
-    def return_music_volume(self, x, y):
+    def return_music_volume(self, x, y, music):
         """Установка ползунка на дорожке
            Parameters x, y: int, int
-           Returns music_volume: int
+           Returns:
         """
-        music_volume = 100
         if 220 < y < 230:
             if 305 <= x <= 349.8:
-                music_volume = 10
+                music.set_volume(0.1)
             elif 349.9 <= x <= 394.7:
-                music_volume = 20
+                music.set_volume(0.2)
             elif 394.8 <= x <= 439.6:
-                music_volume = 30
+                music.set_volume(0.3)
             elif 439.7 <= x <= 484.5:
-                music_volume = 40
+                music.set_volume(0.4)
             elif 484.6 <= x <= 529.4:
-                music_volume = 50
+                music.set_volume(0.5)
             elif 529.5 <= x <= 574.3:
-                music_volume = 60
+                music.set_volume(0.6)
             elif 574.4 <= x <= 619.2:
-                music_volume = 70
+                music.set_volume(0.7)
             elif 619.3 <= x <= 664.1:
-                music_volume = 80
+                music.set_volume(0.8)
             elif 664.2 <= x <= 709:
-                music_volume = 90
-        print(music_volume)
-        return music_volume
+                music.set_volume(0.9)
+            else:
+                music.set_volume(1)
+
+    def global_values(self):
+        """Возвращает глобальные вспомогательные переменные
+           Parameters:
+           Returns volume: int
+        """
+        volume = self
+        return volume
 
     def button_pressed(self):
         """Если кнопка нажата, то меняет картинку
@@ -129,11 +137,12 @@ class Settings:
         no_button = load_setting_image((700, 388), PATHS[26], (64, 64))
         self.screen.blit(no_button[0], no_button[1])
 
-    def run(self, screen):
+    def run(self, screen, music_menu):
         """Открытие настроек
            Parameter screen: surface
            Returns:
         """
+        music_menu.run()
         self.screen = screen
         self.held = False
         self.render_settings(0)
@@ -153,13 +162,14 @@ class Settings:
                             self.button_pressed()
                         else:
                             self.held = True
-                    self.return_music_volume(x, y)
+                            self.return_music_volume(x, y, music_menu)
+                            music_menu.stop()
+                            music_menu.run()
                 if event.type == pygame.MOUSEBUTTONUP:
                     self.held = False
                     x, y = pygame.mouse.get_pos()
-                    if 565 <= x <= 577 and 413 <= y <= 421:
-                        self.button_pressed()
-                    else:
+                    if not (564 <= x <= 578 and 411 <= y <= 426 or
+                            724 <= x <= 739 and 411 <= y <= 426):
                         self.render_settings(1)
                         self.pinning_the_slider(x, y)
             pygame.display.flip()

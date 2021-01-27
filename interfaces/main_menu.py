@@ -23,6 +23,7 @@ class MainMenu:
         # Установка музыки главного меню
         music_menu = Music('main_menu_melody.ogg')
         music_menu.run()
+
         while running:
             # Установка спрайта фона
             screen.blit(load_image(PATHS[2])[0], load_image(PATHS[2])[1])
@@ -114,8 +115,9 @@ class MainMenu:
             if button == 0:
                 # Выключение музыки главного меню
                 music_menu.stop()
-                LevelHub().run(screen)
+                LevelHub().run(screen, music_menu)
             elif button == 1:
                 SaveHub().run(screen)
             elif button == 2:
-                Settings().run(screen)
+                music_menu.stop()
+                Settings().run(screen, music_menu)
