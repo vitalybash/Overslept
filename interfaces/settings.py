@@ -100,6 +100,23 @@ class Settings:
         if 220 < y < 230:
             if 305 <= x <= 349.8:
                 music_volume = 10
+            elif 349.9 <= x <= 394.7:
+                music_volume = 20
+            elif 394.8 <= x <= 439.6:
+                music_volume = 30
+            elif 439.7 <= x <= 484.5:
+                music_volume = 40
+            elif 484.6 <= x <= 529.4:
+                music_volume = 50
+            elif 529.5 <= x <= 574.3:
+                music_volume = 60
+            elif 574.4 <= x <= 619.2:
+                music_volume = 70
+            elif 619.3 <= x <= 664.1:
+                music_volume = 80
+            elif 664.2 <= x <= 709:
+                music_volume = 90
+        print(music_volume)
         return music_volume
 
     def button_pressed(self):
@@ -136,6 +153,7 @@ class Settings:
                             self.button_pressed()
                         else:
                             self.held = True
+                    self.return_music_volume(x, y)
                 if event.type == pygame.MOUSEBUTTONUP:
                     self.held = False
                     x, y = pygame.mouse.get_pos()
