@@ -92,40 +92,42 @@ class Settings:
                                                        (64, 64))
                 self.screen.blit(self.music_slider[0], self.music_slider[1])
 
-    def return_music_volume(self, x, y, music):
-        """Установка ползунка на дорожке
-           Parameters x, y: int, int
+    def return_music_volume(self):
+        """Установка громкости в зависимости от полжения ползунка
+           Parameter:
            Returns:
         """
-        if 220 < y < 230:
-            if 305 <= x <= 349.8:
-                music.set_volume(0.1)
-            elif 349.9 <= x <= 394.7:
-                music.set_volume(0.2)
-            elif 394.8 <= x <= 439.6:
-                music.set_volume(0.3)
-            elif 439.7 <= x <= 484.5:
-                music.set_volume(0.4)
-            elif 484.6 <= x <= 529.4:
-                music.set_volume(0.5)
-            elif 529.5 <= x <= 574.3:
-                music.set_volume(0.6)
-            elif 574.4 <= x <= 619.2:
-                music.set_volume(0.7)
-            elif 619.3 <= x <= 664.1:
-                music.set_volume(0.8)
-            elif 664.2 <= x <= 709:
-                music.set_volume(0.9)
+        if 220 < self.y < 230:
+            if 305 <= self.x <= 349.8:
+                self.music_menu.set_volume(0.1)
+                self.music_map.set_volume(0.1)
+            elif 349.9 <= self.x <= 394.7:
+                self.music_menu.set_volume(0.2)
+                self.music_map.set_volume(0.2)
+            elif 394.8 <= self.x <= 439.6:
+                self.music_menu.set_volume(0.3)
+                self.music_map.set_volume(0.3)
+            elif 439.7 <= self.x <= 484.5:
+                self.music_menu.set_volume(0.4)
+                self.music_map.set_volume(0.4)
+            elif 484.6 <= self.x <= 529.4:
+                self.music_menu.set_volume(0.5)
+                self.music_map.set_volume(0.5)
+            elif 529.5 <= self.x <= 574.3:
+                self.music_menu.set_volume(0.6)
+                self.music_map.set_volume(0.6)
+            elif 574.4 <= self.x <= 619.2:
+                self.music_menu.set_volume(0.7)
+                self.music_map.set_volume(0.7)
+            elif 619.3 <= self.x <= 664.1:
+                self.music_menu.set_volume(0.8)
+                self.music_map.set_volume(0.8)
+            elif 664.2 <= self.x <= 709:
+                self.music_menu.set_volume(0.9)
+                self.music_map.set_volume(0.9)
             else:
-                music.set_volume(1)
-
-    def global_values(self):
-        """Возвращает глобальные вспомогательные переменные
-           Parameters:
-           Returns volume: int
-        """
-        volume = self
-        return volume
+                self.music_menu.set_volume(1)
+                self.music_map.set_volume(1)
 
     def button_pressed(self):
         """Если кнопка нажата, то меняет картинку
@@ -137,12 +139,14 @@ class Settings:
         no_button = load_setting_image((700, 388), PATHS[26], (64, 64))
         self.screen.blit(no_button[0], no_button[1])
 
-    def run(self, screen, music_menu):
+    def run(self, screen, music_menu, music_map):
         """Открытие настроек
            Parameter screen: surface
            Returns:
         """
-        music_menu.run()
+        self.music_menu = music_menu
+        self.music_map = music_map
+        self.music_menu.run()
         self.screen = screen
         self.held = False
         self.render_settings(0)
@@ -154,17 +158,16 @@ class Settings:
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y = pygame.mouse.get_pos()
-                    print(x, y)
+                    self.x, self.y = pygame.mouse.get_pos()
                     if event.button == 1:
-                        if 564 <= x <= 578 and 411 <= y <= 426 or \
-                                724 <= x <= 739 and 411 <= y <= 426:
+                        if 564 <= self.x <= 578 and 411 <= self.y <= 426 or \
+                                724 <= self.x <= 739 and 411 <= self.y <= 426:
                             self.button_pressed()
                         else:
                             self.held = True
-                            self.return_music_volume(x, y, music_menu)
-                            music_menu.stop()
-                            music_menu.run()
+                            self.return_music_volume()
+                            self.music_menu.stop()
+                            self.music_menu.run()
                 if event.type == pygame.MOUSEBUTTONUP:
                     self.held = False
                     x, y = pygame.mouse.get_pos()

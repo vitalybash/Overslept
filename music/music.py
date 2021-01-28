@@ -27,9 +27,6 @@ class Music:
     def set_volume(self, value):
         pygame.mixer.music.set_volume(value)
 
-    def get_volume(self):
-        pygame.mixer.music.get_volume()
-
     def stop(self):
         """Метод, останавливающий музыку или звук
            Parameter:
