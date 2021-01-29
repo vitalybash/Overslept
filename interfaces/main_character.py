@@ -9,6 +9,8 @@ from music.music import Music
 class MainCharacter:
     def __init__(self):
         self.kind = 0
+        self.health = 100
+        self.damage = 20
         self.cell_now = [2, 2]
         self.frame = 0
         self.ticker_for_vibe = 1
@@ -43,7 +45,7 @@ class MainCharacter:
             if self.now_hit_frame == 4:
                 self.now_hit_frame = 0
                 return False
-        return True
+        return self.health, self.damage, self.cell_now
 
     def render_vibing(self, screen, position):
         now_frame = self.frame + self.ticker_for_vibe

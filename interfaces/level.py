@@ -14,7 +14,7 @@ class Level:
         self.frame = 0
         self.opponent_condition = 3
         self.main_character_condition = 3
-        self.opponent = Opponent()
+        self.opponent = Opponent(self.level)
         self.main_character = MainCharacter()
 
     def run(self, screen):
@@ -22,7 +22,8 @@ class Level:
         while running:
             self.render_level(screen)
             if not self.opponent.run(screen,
-                                     self.opponent_condition, self.level):
+                                     self.opponent_condition, self.level,
+                                     self.main_hero_pos)[0]:
                 self.opponent_condition = 0
             if not self.main_character.run(screen,
                                            self.main_character_condition,
