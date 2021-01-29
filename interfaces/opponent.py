@@ -18,6 +18,7 @@ class Opponent:
         self.ticker_for_go = 1
         self.ticker_for_punch = 1
         self.now_hit_frame = 0
+        self.damage_given = 0
 
     def run(self, screen, condition, level, main_character_pos):
         self.main_character_pos = main_character_pos
@@ -26,6 +27,7 @@ class Opponent:
         posy = FIELD_BEGIN_COORDS[1] + (CELL_HEIGHT * self.cell_now[1] + 1)
         position = [posx, posy]
         if condition == 0:
+            self.damage_given = 0
             self.frame = 20
             self.ticker_for_vibe = self.ticker_for_vibe % 2 + 1
             self.render_vibing(screen, position)
@@ -37,6 +39,7 @@ class Opponent:
             self.frame = 30
             self.ticker_for_punch = self.ticker_for_punch % 6 + 1
             self.render_punching(screen, position)
+            self.damage_given = self.damage
         if condition == 3:
             self.now_hit_frame += 1
             if self.now_hit_frame != 0:

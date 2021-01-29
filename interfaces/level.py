@@ -16,6 +16,7 @@ class Level:
         self.main_character_condition = 3
         self.opponent = Opponent(self.level)
         self.main_character = MainCharacter()
+        self.main_hero_pos = []
 
     def run(self, screen):
         running = True
@@ -29,6 +30,10 @@ class Level:
                                            self.main_character_condition,
                                            self.level):
                 self.main_character_condition = 0
+            self.main_hero_pos = self.main_character.run(
+                screen,
+                self.main_character_condition,
+                self.level)[2]
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
