@@ -97,42 +97,42 @@ class Settings:
            Parameter:
            Returns:
         """
-        y_for_music_slider = 227.5
-        if 224 <= self.y <= 231:
-            y_for_music_slider = 227.5
-        if 295 <= self.x <= 342.1:
-            self.music_slider = load_setting_image(
-                (342.1, y_for_music_slider),
-                PATHS[29],
-                (64, 64))
-            self.screen.blit(self.music_slider[0], self.music_slider[1])
-        elif 349.9 <= self.x <= 394.7:
-            self.music_menu.set_volume(0.2)
-            self.music_map.set_volume(0.2)
-        elif 394.8 <= self.x <= 439.6:
-            self.music_menu.set_volume(0.3)
-            self.music_map.set_volume(0.3)
-        elif 439.7 <= self.x <= 484.5:
-            self.music_menu.set_volume(0.4)
-            self.music_map.set_volume(0.4)
-        elif 484.6 <= self.x <= 529.4:
-            self.music_menu.set_volume(0.5)
-            self.music_map.set_volume(0.5)
-        elif 529.5 <= self.x <= 574.3:
-            self.music_menu.set_volume(0.6)
-            self.music_map.set_volume(0.6)
-        elif 574.4 <= self.x <= 619.2:
-            self.music_menu.set_volume(0.7)
-            self.music_map.set_volume(0.7)
-        elif 619.3 <= self.x <= 664.1:
-            self.music_menu.set_volume(0.8)
-            self.music_map.set_volume(0.8)
-        elif 664.2 <= self.x <= 709:
-            self.music_menu.set_volume(0.9)
-            self.music_map.set_volume(0.9)
-        else:
-            self.music_menu.set_volume(1)
-            self.music_map.set_volume(1)
+        if self.is_changed_music_slider is False:
+            if 224 <= self.y <= 231:
+                if 295 <= self.x <= 342.1:
+                    self.music_slider = load_setting_image(
+                        (342.1, 204),
+                        PATHS[29],
+                        (64, 64))
+                    self.screen.blit(self.music_slider[0],
+                                     self.music_slider[1])
+                elif 349.9 <= self.x <= 394.7:
+                    self.music_menu.set_volume(0.2)
+                    self.music_map.set_volume(0.2)
+                elif 394.8 <= self.x <= 439.6:
+                    self.music_menu.set_volume(0.3)
+                    self.music_map.set_volume(0.3)
+                elif 439.7 <= self.x <= 484.5:
+                    self.music_menu.set_volume(0.4)
+                    self.music_map.set_volume(0.4)
+                elif 484.6 <= self.x <= 529.4:
+                    self.music_menu.set_volume(0.5)
+                    self.music_map.set_volume(0.5)
+                elif 529.5 <= self.x <= 574.3:
+                    self.music_menu.set_volume(0.6)
+                    self.music_map.set_volume(0.6)
+                elif 574.4 <= self.x <= 619.2:
+                    self.music_menu.set_volume(0.7)
+                    self.music_map.set_volume(0.7)
+                elif 619.3 <= self.x <= 664.1:
+                    self.music_menu.set_volume(0.8)
+                    self.music_map.set_volume(0.8)
+                elif 664.2 <= self.x <= 709:
+                    self.music_menu.set_volume(0.9)
+                    self.music_map.set_volume(0.9)
+                else:
+                    self.music_menu.set_volume(1)
+                    self.music_map.set_volume(1)
 
     def button_pressed(self):
         """Если кнопка нажата, то меняет картинку
@@ -154,6 +154,7 @@ class Settings:
         self.music_menu.run()
         self.screen = screen
         # self.held = False
+        self.is_changed_music_slider = False
         self.render_settings(0)
         running = True
         while running:
@@ -171,14 +172,17 @@ class Settings:
                             self.button_pressed()
                         elif 295 <= self.x <= 766 and 224 <= self.y <= 231:
                             # self.held = True
-                            self.return_music_volume()
+                            self.is_changed_music_slider = True
                             self.music_menu.stop()
                             self.music_menu.run()
                 if event.type == pygame.MOUSEBUTTONUP:
                     # self.held = False
+                    self.is_changed_music_slider = False
                     x, y = pygame.mouse.get_pos()
                     if not (564 <= x <= 578 and 411 <= y <= 426 or
                             724 <= x <= 739 and 411 <= y <= 426):
+                        self.return_music_volume()
                         self.render_settings(1)
+                        self.return_music_volume()
                         # self.pinning_the_slider(x, y)
             pygame.display.flip()
