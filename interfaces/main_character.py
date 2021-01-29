@@ -9,6 +9,8 @@ from music.music import Music
 class MainCharacter:
     def __init__(self):
         self.kind = 0
+        self.health = 100
+        self.damage = 20
         self.cell_now = [2, 2]
         self.frame = 0
         self.ticker_for_vibe = 1
@@ -43,27 +45,27 @@ class MainCharacter:
             if self.now_hit_frame == 4:
                 self.now_hit_frame = 0
                 return False
-        return True
+        return self.health, self.damage, self.cell_now
 
     def render_vibing(self, screen, position):
         now_frame = self.frame + self.ticker_for_vibe
-        screen.blit(func.load_hero(HEROES_PATHS[now_frame],
+        screen.blit(func.load_main_hero(HEROES_PATHS[now_frame],
                                    position)[0],
-                    func.load_hero(HEROES_PATHS[now_frame],
+                    func.load_main_hero(HEROES_PATHS[now_frame],
                                    position)[1])
 
     def render_going(self, screen, position):
         now_frame = self.frame + self.ticker_for_go
-        screen.blit(func.load_hero(HEROES_PATHS[now_frame],
+        screen.blit(func.load_main_hero(HEROES_PATHS[now_frame],
                                    position)[0],
-                    func.load_hero(HEROES_PATHS[now_frame],
+                    func.load_main_hero(HEROES_PATHS[now_frame],
                                    position)[1])
 
     def render_punching(self, screen, position):
         now_frame = self.frame + self.ticker_for_punch
-        screen.blit(func.load_hero(HEROES_PATHS[now_frame],
+        screen.blit(func.load_main_hero(HEROES_PATHS[now_frame],
                                    position)[0],
-                    func.load_hero(HEROES_PATHS[now_frame],
+                    func.load_main_hero(HEROES_PATHS[now_frame],
                                    position)[1])
 
     def render_hit(self, screen, position, now_frame):
