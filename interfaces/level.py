@@ -2,6 +2,7 @@ import pygame as pg
 from developers_settings import *
 import basic_functions as func
 from interfaces.opponent import Opponent
+from interfaces.main_character import MainCharacter
 
 
 class Level:
@@ -12,15 +13,21 @@ class Level:
         self.number_of_level_frames = 0
         self.frame = 0
         self.opponent_condition = 3
-        self.opponet = Opponent()
+        self.main_character_condition = 3
+        self.opponent = Opponent()
+        self.main_character = MainCharacter()
 
     def run(self, screen):
         running = True
         while running:
             self.render_level(screen)
-            if not self.opponet.run(screen,
-                                    self.opponent_condition, self.level):
+            if not self.opponent.run(screen,
+                                     self.opponent_condition, self.level):
                 self.opponent_condition = 0
+            if not self.main_character.run(screen,
+                                           self.main_character_condition,
+                                           self.level):
+                self.main_character_condition = 0
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
