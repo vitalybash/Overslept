@@ -28,13 +28,17 @@ class Settings:
         self.screen.blit(load_image(PATHS[30])[0],
                          load_image(PATHS[30])[1])
         # установка текста и кнопок, ползунков
-        font = pygame.font.Font(
+        self.font = pygame.font.Font(
             'fonts/comic _sans_ms_pixel_rus_eng.ttf', 40)
-        self.screen.blit(font.render('НАСТРОЙКИ', True,
-                                     (250, 250, 250)), (420, 62, 188, 572))
+        self.font_count = pygame.font.Font(
+            'fonts/comic _sans_ms_pixel_rus_eng.ttf', 35)
+        self.screen.blit(self.font.render('НАСТРОЙКИ', True,
+                                          (250, 250, 250)),
+                         (420, 62, 188, 572))
         # установка текста и ползунков, относящихся к музыке
-        self.screen.blit(font.render('музыка:', True,
-                                     (250, 250, 250)), (92, 200, 188, 572))
+        self.screen.blit(self.font.render('музыка:', True,
+                                          (250, 250, 250)),
+                         (92, 200, 188, 572))
         music_slider_way = load_setting_image((275, 196), PATHS[28], (512, 64))
         self.screen.blit(music_slider_way[0], music_slider_way[1])
         # если flag = 0, то начальное расположение позунка,
@@ -44,8 +48,9 @@ class Settings:
                                                    (64, 64))
             self.screen.blit(self.music_slider[0], self.music_slider[1])
         # установка текста и ползунков, относящихся к звукам
-        self.screen.blit(font.render('звук:', True,
-                                     (250, 250, 250)), (92, 296, 188, 572))
+        self.screen.blit(self.font.render('звук:', True,
+                                          (250, 250, 250)),
+                         (92, 296, 188, 572))
         sound_slider_way = load_setting_image((275, 292), PATHS[28], (512, 64))
         self.screen.blit(sound_slider_way[0], sound_slider_way[1])
         if not flag_sound:
@@ -53,16 +58,44 @@ class Settings:
                                                    (64, 64))
             self.screen.blit(self.sound_slider[0], self.sound_slider[1])
         # установка текста и кнопок, относящихся к полноэкранному режиму
-        self.screen.blit(font.render('полноэкранный режим:', True,
-                                     (250, 250, 250)), (92, 392, 188, 572))
+        self.screen.blit(self.font.render('полноэкранный режим:', True,
+                                          (250, 250, 250)),
+                         (92, 392, 188, 572))
         yes_button = load_setting_image((540, 388), PATHS[26], (64, 64))
         self.screen.blit(yes_button[0], yes_button[1])
-        self.screen.blit(font.render('да', True,
-                                     (250, 250, 250)), (620, 392, 188, 572))
+        self.screen.blit(self.font.render('да', True,
+                                          (250, 250, 250)),
+                         (620, 392, 188, 572))
         no_button = load_setting_image((700, 388), PATHS[27], (64, 64))
         self.screen.blit(no_button[0], no_button[1])
-        self.screen.blit(font.render('нет', True,
-                                     (250, 250, 250)), (780, 392, 188, 572))
+        self.screen.blit(self.font.render('нет', True,
+                                          (250, 250, 250)),
+                         (780, 392, 188, 572))
+
+    def text_for_music_slider_way(self):
+        """Установка цифр-подсказок снизу дорожки ползунка
+           Parameter:
+           Returns:
+        """
+        music_slider_way_y = 250
+        music_slider_way_x = 295
+        for i in range(2):
+            for j in range(10):
+                self.screen.blit(self.font_count.render(f'{j}', True,
+                                                        (250, 250, 250)),
+                                 (
+                                     music_slider_way_x, music_slider_way_y,
+                                     188,
+                                     572))
+                j += 1
+                music_slider_way_x += 47.1
+            self.screen.blit(self.font_count.render('10', True,
+                                                    (250, 250, 250)),
+                             (
+                                 755, music_slider_way_y, 188,
+                                 572))
+            music_slider_way_y = 347
+            music_slider_way_x = 295
 
     def pinning_the_slider(self):
         """Установка положения ползунка
@@ -75,48 +108,48 @@ class Settings:
                 music_y = 204
             if 321 <= self.y <= 327:
                 music_y = 301
-            if 295 <= self.x <= 342.1:
-                self.music_slider = load_setting_image((322.1, music_y),
+            if 335 <= self.x <= 355:
+                self.music_slider = load_setting_image((315, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 342.2 <= self.x <= 389.3:
-                self.music_slider = load_setting_image((369.3, music_y),
+            elif 356 <= self.x <= 402:
+                self.music_slider = load_setting_image((366, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 389.4 <= self.x <= 436.5:
-                self.music_slider = load_setting_image((416.5, music_y),
+            elif 403 <= self.x <= 447:
+                self.music_slider = load_setting_image((410, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 436.6 <= self.x <= 483.7:
-                self.music_slider = load_setting_image((463.7, music_y),
+            elif 448 <= self.x <= 498:
+                self.music_slider = load_setting_image((460, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 483.8 <= self.x <= 530.9:
-                self.music_slider = load_setting_image((510.9, music_y),
+            elif 499 <= self.x <= 540:
+                self.music_slider = load_setting_image((505, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 531 <= self.x <= 578.1:
-                self.music_slider = load_setting_image((558.1, music_y),
+            elif 541 <= self.x <= 585:
+                self.music_slider = load_setting_image((552, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 578.2 <= self.x <= 625.3:
-                self.music_slider = load_setting_image((605.3, music_y),
+            elif 586 <= self.x <= 635:
+                self.music_slider = load_setting_image((600, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 625.4 <= self.x <= 672.5:
-                self.music_slider = load_setting_image((652.5, music_y),
+            elif 631 <= self.x <= 680:
+                self.music_slider = load_setting_image((645, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
-            elif 672.6 <= self.x <= 719.7:
-                self.music_slider = load_setting_image((699.7, music_y),
+            elif 681 <= self.x <= 727:
+                self.music_slider = load_setting_image((692, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
                                  self.music_slider[1])
@@ -148,18 +181,17 @@ class Settings:
            Returns:
         """
         self.music_menu = music_menu
-        self.music_menu.run()
         self.screen = screen
         self.is_changed_music_slider = False
         self.render_settings(0, 0)
         running = True
         while running:
+            self.text_for_music_slider_way()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.x, self.y = pygame.mouse.get_pos()
-                    print(self.x, self.y)
                     if event.button == 1:
                         if 564 <= self.x <= 578 and 411 <= self.y <= 426 or \
                                 724 <= self.x <= 739 and 411 <= self.y <= 426:

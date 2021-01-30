@@ -5,6 +5,7 @@ from developers_settings import *
 from interfaces.main_character import MainCharacter
 from interfaces.opponent import Opponent
 from interfaces.web import Web
+from music.music import Music
 
 
 class Level:
@@ -70,6 +71,8 @@ class Level:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
+                    music_map = Music('map_melody.ogg')
+                    music_map.run()
 
                 if event.type == pg.MOUSEMOTION:
                     mouse_x, mouse_y = event.pos

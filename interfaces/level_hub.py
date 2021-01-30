@@ -5,7 +5,6 @@ import basic_functions as func
 from developers_settings import *
 from music.music import Music
 from interfaces.level import Level
-from interfaces.settings import Settings
 
 
 #  Класс отвечающий за реализацию хаба уровней и всего что с ним звязанно
@@ -756,5 +755,3 @@ class LevelHub:
                     func.load_pause_slider(PAUSE_SLIDER_POSITION1)[1])
         screen.blit(func.load_pause_slider(PAUSE_SLIDER_POSITION2)[0],
                     func.load_pause_slider(PAUSE_SLIDER_POSITION2)[1])
-
-

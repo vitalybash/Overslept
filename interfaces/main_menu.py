@@ -119,5 +119,4 @@ class MainMenu:
             elif button == 1:
                 SaveHub().run(screen)
             elif button == 2:
-                music_menu.stop()
                 Settings().run(screen, music_menu)
