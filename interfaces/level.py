@@ -16,13 +16,14 @@ class Level:
         self.frame = 0
         self.opponent_condition = 0
         self.main_character_condition = 3
-        self.opponent = Opponent()
+        self.opponent = Opponent(self.level)
         self.main_character = MainCharacter()
         self.web = Web()
         self.main_hero_pos = []
         self.main_hero_health = 0
         self.opponent_health = 0
         self.pause_condition = 0
+        self.turn = 0
 
     def run(self, screen):
         running = True
@@ -33,6 +34,8 @@ class Level:
             self.render_main_hero_health(screen)
             self.render_opponent_health(screen)
             self.render_pause_btn(screen)
+
+            all_about_web = self.web.run(screen, self.turn)
 
             all_about_main_hero = self.main_character.run(
                 screen,
@@ -46,11 +49,11 @@ class Level:
             all_about_opponent = self.opponent.run(
                 screen,
                 self.opponent_condition, self.level, all_about_main_hero[1])
-
             if not all_about_opponent:
                 self.opponent_condition = 0
             if all_about_opponent:
                 self.opponent_health = all_about_opponent[1]
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
