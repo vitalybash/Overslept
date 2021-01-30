@@ -11,7 +11,7 @@ class MainCharacter:
         self.kind = 0
         self.health = 100
         self.damage = 20
-        self.cell_now = [2, 2]
+        self.cell_now = []
         self.frame = 0
         self.ticker_for_vibe = 1
         self.ticker_for_go = 1
@@ -19,7 +19,9 @@ class MainCharacter:
         self.now_hit_frame = 0
         self.damage_given = 0
 
-    def run(self, screen, condition, level):
+    def run(self, screen, condition, level, pos):
+        print(pos)
+        self.cell_now = pos
         self.kind = level
         posx = FIELD_BEGIN_COORDS[0] + CELL_WIDTH * self.cell_now[0] - 115
         posy = FIELD_BEGIN_COORDS[1] + \

@@ -52,8 +52,8 @@ class Opponent:
             self.render_vibing(screen, position)
             if self.now_hit_frame == 4:
                 self.now_hit_frame = 0
-                return False
-        return self.damage_given, self.health
+                return False, self.cell_now
+        return self.damage_given, self.cell_now, self.health
 
     def think(self):
         list_of_x = [1, 1, 1, 0, 0, -1, -1, -1]
