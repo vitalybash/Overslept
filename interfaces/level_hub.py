@@ -5,6 +5,7 @@ import basic_functions as func
 from developers_settings import *
 from music.music import Music
 from interfaces.level import Level
+from interfaces.settings import Settings
 
 
 #  Класс отвечающий за реализацию хаба уровней и всего что с ним звязанно

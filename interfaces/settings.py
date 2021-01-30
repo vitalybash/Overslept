@@ -19,7 +19,7 @@ class Settings:
     """Класс, отвечающий за настройки(громкость музыки, звуков;
     разрешение окна"""
 
-    def render_settings(self, flag):
+    def render_settings(self, flag, flag_sound):
         """Установка изображений фона, кнопок и т. п.
            Parameter flag: int
            Returns:
@@ -28,7 +28,8 @@ class Settings:
         self.screen.blit(load_image(PATHS[30])[0],
                          load_image(PATHS[30])[1])
         # установка текста и кнопок, ползунков
-        font = pygame.font.SysFont('impact', 40)
+        font = pygame.font.Font(
+            'fonts/comic _sans_ms_pixel_rus_eng.ttf', 40)
         self.screen.blit(font.render('НАСТРОЙКИ', True,
                                      (250, 250, 250)), (420, 62, 188, 572))
         # установка текста и ползунков, относящихся к музыке
@@ -47,8 +48,10 @@ class Settings:
                                      (250, 250, 250)), (92, 296, 188, 572))
         sound_slider_way = load_setting_image((275, 292), PATHS[28], (512, 64))
         self.screen.blit(sound_slider_way[0], sound_slider_way[1])
-        sound_slider = load_setting_image((275, 300), PATHS[29], (64, 64))
-        self.screen.blit(sound_slider[0], sound_slider[1])
+        if not flag_sound:
+            self.sound_slider = load_setting_image((275, 300), PATHS[29],
+                                                   (64, 64))
+            self.screen.blit(self.sound_slider[0], self.sound_slider[1])
         # установка текста и кнопок, относящихся к полноэкранному режиму
         self.screen.blit(font.render('полноэкранный режим:', True,
                                      (250, 250, 250)), (92, 392, 188, 572))
@@ -61,105 +64,114 @@ class Settings:
         self.screen.blit(font.render('нет', True,
                                      (250, 250, 250)), (780, 392, 188, 572))
 
-    def holding(self):
-        """Перетаскивание ползунка
+    def pinning_the_slider(self):
+        """Установка положения ползунка
            Parameter:
            Returns:
         """
-        if self.held:
-            x, y = pygame.mouse.get_pos()
-            if 305 <= x <= 753 and 220 < y < 230:
-                self.music_slider = load_setting_image((x - 30, y - 20),
-                                                       PATHS[29],
-                                                       (64, 64))
-                self.screen.blit(self.music_slider[0], self.music_slider[1])
+        music_y = 0
+        if self.is_changed_music_slider is False:
+            if 224 <= self.y <= 231:
+                music_y = 204
+            if 321 <= self.y <= 327:
+                music_y = 301
+            if 295 <= self.x <= 342.1:
+                self.music_slider = load_setting_image((322.1, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 342.2 <= self.x <= 389.3:
+                self.music_slider = load_setting_image((369.3, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 389.4 <= self.x <= 436.5:
+                self.music_slider = load_setting_image((416.5, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 436.6 <= self.x <= 483.7:
+                self.music_slider = load_setting_image((463.7, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 483.8 <= self.x <= 530.9:
+                self.music_slider = load_setting_image((510.9, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 531 <= self.x <= 578.1:
+                self.music_slider = load_setting_image((558.1, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 578.2 <= self.x <= 625.3:
+                self.music_slider = load_setting_image((605.3, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 625.4 <= self.x <= 672.5:
+                self.music_slider = load_setting_image((652.5, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 672.6 <= self.x <= 719.7:
+                self.music_slider = load_setting_image((699.7, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
             else:
-                self.music_slider = load_setting_image((275, 204), PATHS[29],
-                                                       (64, 64))
-                self.screen.blit(self.music_slider[0], self.music_slider[1])
-                self.render_settings(1)
-
-    def pinning_the_slider(self, x, y):
-        """Установка ползунка на дорожке
-           Parameters x, y: int, int
-           Returns:
-        """
-        if self.held is False:
-            if 305 <= x <= 753 and 220 < y < 230:
-                self.music_slider = load_setting_image((x - 30, y - 20),
-                                                       PATHS[29],
-                                                       (64, 64))
-                self.screen.blit(self.music_slider[0], self.music_slider[1])
-
-    def return_music_volume(self, x, y):
-        """Установка ползунка на дорожке
-           Parameters x, y: int, int
-           Returns music_volume: int
-        """
-        music_volume = 100
-        if 220 < y < 230:
-            if 305 <= x <= 349.8:
-                music_volume = 10
-            elif 349.9 <= x <= 394.7:
-                music_volume = 20
-            elif 394.8 <= x <= 439.6:
-                music_volume = 30
-            elif 439.7 <= x <= 484.5:
-                music_volume = 40
-            elif 484.6 <= x <= 529.4:
-                music_volume = 50
-            elif 529.5 <= x <= 574.3:
-                music_volume = 60
-            elif 574.4 <= x <= 619.2:
-                music_volume = 70
-            elif 619.3 <= x <= 664.1:
-                music_volume = 80
-            elif 664.2 <= x <= 709:
-                music_volume = 90
-        print(music_volume)
-        return music_volume
+                self.music_slider = load_setting_image((723, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
 
     def button_pressed(self):
         """Если кнопка нажата, то меняет картинку
            Parameter:
            Returns:
         """
-        yes_button = load_setting_image((540, 388), PATHS[27], (64, 64))
-        self.screen.blit(yes_button[0], yes_button[1])
-        no_button = load_setting_image((700, 388), PATHS[26], (64, 64))
-        self.screen.blit(no_button[0], no_button[1])
+        if 564 <= self.x <= 578 and 411 <= self.y <= 426:
+            yes_button = load_setting_image((540, 388), PATHS[27], (64, 64))
+            self.screen.blit(yes_button[0], yes_button[1])
+            no_button = load_setting_image((700, 388), PATHS[26], (64, 64))
+            self.screen.blit(no_button[0], no_button[1])
+        else:
+            yes_button = load_setting_image((540, 388), PATHS[26], (64, 64))
+            self.screen.blit(yes_button[0], yes_button[1])
+            no_button = load_setting_image((700, 388), PATHS[27], (64, 64))
+            self.screen.blit(no_button[0], no_button[1])
 
-    def run(self, screen):
+    def run(self, screen, music_menu):
         """Открытие настроек
-           Parameter screen: surface
+           Parameter screen, music_menu: surface, Music
            Returns:
         """
+        self.music_menu = music_menu
+        self.music_menu.run()
         self.screen = screen
-        self.held = False
-        self.render_settings(0)
+        self.is_changed_music_slider = False
+        self.render_settings(0, 0)
         running = True
         while running:
-            if self.held:
-                self.holding()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y = pygame.mouse.get_pos()
-                    print(x, y)
+                    self.x, self.y = pygame.mouse.get_pos()
+                    print(self.x, self.y)
                     if event.button == 1:
-                        if 564 <= x <= 578 and 411 <= y <= 426 or \
-                                724 <= x <= 739 and 411 <= y <= 426:
+                        if 564 <= self.x <= 578 and 411 <= self.y <= 426 or \
+                                724 <= self.x <= 739 and 411 <= self.y <= 426:
                             self.button_pressed()
-                        else:
-                            self.held = True
-                    self.return_music_volume(x, y)
+                        elif 295 <= self.x <= 766 and 224 <= self.y <= 231:
+                            self.is_changed_music_slider = True
                 if event.type == pygame.MOUSEBUTTONUP:
-                    self.held = False
-                    x, y = pygame.mouse.get_pos()
-                    if 565 <= x <= 577 and 413 <= y <= 421:
-                        self.button_pressed()
-                    else:
-                        self.render_settings(1)
-                        self.pinning_the_slider(x, y)
+                    self.is_changed_music_slider = False
+                    if 295 <= self.x <= 766 and 224 <= self.y <= 231:
+                        self.render_settings(1, 0)
+                        self.pinning_the_slider()
+                    elif 295 <= self.x <= 766 and 321 <= self.y <= 327:
+                        self.render_settings(0, 1)
+                        self.pinning_the_slider()
             pygame.display.flip()
