@@ -19,6 +19,7 @@ class Opponent:
         self.ticker_for_punch = 1
         self.now_hit_frame = 0
         self.damage_given = 0
+        self.main_character_pos = []
 
     def run(self, screen, condition, level, main_character_pos):
         self.main_character_pos = main_character_pos
