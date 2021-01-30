@@ -43,7 +43,7 @@ class Level:
                 screen,
                 self.main_character_condition,
                 self.level)
-            if not all_about_main_hero:
+            if not all_about_main_hero[0]:
                 self.main_character_condition = 0
             if all_about_main_hero:
                 self.main_hero_health = all_about_main_hero[0]

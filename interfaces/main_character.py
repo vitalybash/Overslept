@@ -17,6 +17,7 @@ class MainCharacter:
         self.ticker_for_go = 1
         self.ticker_for_punch = 1
         self.now_hit_frame = 0
+        self.damage_given = 0
 
     def run(self, screen, condition, level):
         self.kind = level
@@ -44,8 +45,8 @@ class MainCharacter:
             self.render_vibing(screen, position)
             if self.now_hit_frame == 4:
                 self.now_hit_frame = 0
-                return False
-        return self.health, self.damage, self.cell_now
+                return False, self.cell_now
+        return self.health, self.cell_now, self.damage_given
 
     def render_vibing(self, screen, position):
         now_frame = self.frame + self.ticker_for_vibe
