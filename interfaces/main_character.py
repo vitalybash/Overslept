@@ -17,6 +17,8 @@ class MainCharacter:
         self.ticker_for_go = 1
         self.ticker_for_punch = 1
         self.now_hit_frame = 0
+        self.now_punch_frame = 0
+        self.now_go_frame = 0
         self.damage_given = 0
 
     def run(self, screen, condition, level, pos):
@@ -32,13 +34,23 @@ class MainCharacter:
             self.ticker_for_vibe = self.ticker_for_vibe % 2 + 1
             self.render_vibing(screen, position)
         if condition == 1:
+            self.now_go_frame += 1
+            if self.now_go_frame != 0:
+                self.render_going(screen, position, self.now_go_frame + 7)
             self.frame = 7
             self.ticker_for_go = self.ticker_for_go % 5 + 1
-            self.render_going(screen, position)
+            if self.now_go_frame == 5:
+                self.now_go_frame = 0
+                return False, self.cell_now
         if condition == 2:
+            self.now_punch_frame += 1
+            if self.now_punch_frame != 0:
+                self.render_punching(screen, position, self.now_punch_frame + 12)
             self.frame = 12
             self.ticker_for_punch = self.ticker_for_punch % 7 + 1
-            self.render_punching(screen, position)
+            if self.now_punch_frame == 7:
+                self.now_punch_frame = 0
+                return False, self.cell_now
         if condition == 3:
             self.now_hit_frame += 1
             if self.now_hit_frame != 0:
@@ -58,15 +70,13 @@ class MainCharacter:
                     func.load_main_hero(HEROES_PATHS[now_frame],
                                         position)[1])
 
-    def render_going(self, screen, position):
-        now_frame = self.frame + self.ticker_for_go
+    def render_going(self, screen, position, now_frame):
         screen.blit(func.load_main_hero(HEROES_PATHS[now_frame],
                                         position)[0],
                     func.load_main_hero(HEROES_PATHS[now_frame],
                                         position)[1])
 
-    def render_punching(self, screen, position):
-        now_frame = self.frame + self.ticker_for_punch
+    def render_punching(self, screen, position, now_frame):
         screen.blit(func.load_main_hero(HEROES_PATHS[now_frame],
                                         position)[0],
                     func.load_main_hero(HEROES_PATHS[now_frame],
