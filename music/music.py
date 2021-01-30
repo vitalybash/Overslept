@@ -14,8 +14,6 @@ class Music:
             pygame.mixer.music.load('music/music_data/main_menu_melody.ogg')
         elif name_music == 'map_melody.ogg':
             pygame.mixer.music.load('music/music_data/map_melody.ogg')
-        self.count = 0
-        self.volume_pin = 0
 
     def run(self):
         """Метод, проигрывающий музыку или звук
@@ -23,9 +21,6 @@ class Music:
            Returns:
         """
         pygame.mixer.music.play(-1)
-
-    def set_volume(self, value):
-        pygame.mixer.music.set_volume(value)
 
     def stop(self):
         """Метод, останавливающий музыку или звук

@@ -23,9 +23,6 @@ class MainMenu:
         # Установка музыки главного меню
         music_menu = Music('main_menu_melody.ogg')
         music_menu.run()
-        music_menu.set_volume(1)
-        # Установка музыки карты
-        music_map = Music('map_melody.ogg')
 
         while running:
             # Установка спрайта фона
@@ -123,4 +120,4 @@ class MainMenu:
                 SaveHub().run(screen)
             elif button == 2:
                 music_menu.stop()
-                Settings().run(screen, music_menu, music_map)
+                Settings().run(screen, music_menu)
