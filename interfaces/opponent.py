@@ -9,11 +9,13 @@ from music.music import Music
 class Opponent:
     def __init__(self, kind):
         self.kind = kind
+        ''' ^ вид противника'''
         if self.kind == 1:
             self.health = 50
             self.damage = 30
         self.cell_now = [8, 2]
         self.frame = 0
+        #  раскадровачные маятники для собаки
         self.ticker_for_vibe = 1
         self.ticker_for_go = 1
         self.ticker_for_punch = 1

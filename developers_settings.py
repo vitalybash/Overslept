@@ -93,3 +93,13 @@ FIELD_BEGIN_COORDS = [60, 496]
 #  размеры клеток
 CELL_HEIGHT = 20
 CELL_WIDTH = 100
+
+#  координаты отображения хп основного героя
+HEALTH_BAR = [16, 16]
+HEALTH_AMOUNT = [48, 16]
+#  координаты отображения хп опонента
+HEALTH_BAR_OP = [680, 16]
+HEALTH_AMOUNT_OP = [712, 16]
+#  координаты паузы
+PAUSE_BTN_FOR_LEVEL = [986, 2]
+PAUSE_BTN_COORDS = [986, 2, 1022, 38]
