@@ -28,20 +28,12 @@ class Web:
                     self.height_cell),
                                  4)
 
-    # def get_cell(self, mouse_pos):
-    #     x, y = mouse_pos
-    #     # Если пользователь щелкнул мимо сетки по горизонтали
-    #     cell_x = (x - self.left) // self.cell_size
-    #     cell_y = (y - self.top) // self.cell_size
-    #     if cell_x < 0 or cell_x >= 3 or \
-    #             cell_y < 0 or cell_y >= 9:
-    #         return None
-    #     return cell_x, cell_y
-    #
-    # def on_click(self, cell):
-    #     col, row = cell
-    #     self.board[row][col] = (self.board[row][col] + 1) % 2
-    #
-    # def get_click(self, mouse_pos):
-    #     cell = self.get_cell(mouse_pos)
-    #     self.on_click(cell)
+    def get_cell(self, mouse_pos):
+        x, y = mouse_pos
+        # Если пользователь щелкнул мимо сетки по горизонтали
+        cell_x = (x - self.top_right_coords[0]) // self.width_cell
+        cell_y = (y - self.top_right_coords[1]) // self.height_cell
+        if cell_x < 0 or cell_x >= 9 or \
+                cell_y < 0 or cell_y >= 3:
+            return None
+        return [cell_x, cell_y]

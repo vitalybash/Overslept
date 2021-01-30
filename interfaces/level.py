@@ -142,36 +142,3 @@ class Level:
                                          PAUSE_BTN_FOR_LEVEL)[0],
                     func.load_health_bar(PATHS[217 + self.pause_condition],
                                          PAUSE_BTN_FOR_LEVEL)[1])
-
-    def render_main_hero_health(self, screen):
-        health_level = self.main_hero_health // 10
-        health_frame = 216 - health_level
-        if self.main_hero_health == 100:
-            health_frame = 207
-        screen.blit(func.load_health_bar(PATHS[health_frame], HEALTH_BAR)[0],
-                    func.load_health_bar(PATHS[health_frame], HEALTH_BAR)[1])
-        font = pg.font.SysFont('agencyfb', 40)
-        text = font.render(f'{self.main_hero_health}', True, (250, 250, 250))
-        screen.blit(text, (HEALTH_AMOUNT[0], HEALTH_AMOUNT[1]))
-
-    def render_opponent_health(self, screen):
-        health = 10
-        if self.level == 1:
-            health = 5
-        health_level = self.opponent_health // health
-        health_frame = 216 - health_level
-        if self.opponent_health == health * 10:
-            health_frame = 207
-        screen.blit(func.load_health_bar(PATHS[health_frame],
-                                         HEALTH_BAR_OP)[0],
-                    func.load_health_bar(PATHS[health_frame],
-                                         HEALTH_BAR_OP)[1])
-        font = pg.font.SysFont('agencyfb', 40)
-        text = font.render(f'{self.opponent_health}', True, (250, 250, 250))
-        screen.blit(text, (HEALTH_AMOUNT_OP[0], HEALTH_AMOUNT_OP[1]))
-
-    def render_pause_btn(self, screen):
-        screen.blit(func.load_health_bar(PATHS[217 + self.pause_condition],
-                                         PAUSE_BTN_FOR_LEVEL)[0],
-                    func.load_health_bar(PATHS[217 + self.pause_condition],
-                                         PAUSE_BTN_FOR_LEVEL)[1])
