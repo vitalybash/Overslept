@@ -4,17 +4,13 @@ from developers_settings import *
 
 class Web:
     def __init__(self):
-        self.turn = 0
         self.board = [[0] * 9 for _ in range(3)]
         self.top_right_coords = FIELD_BEGIN_COORDS
         self.height_cell = CELL_HEIGHT
         self.width_cell = CELL_WIDTH
         self.size = [9, 3]
 
-    def run(self, screen, turn):
-        #  if turn % 2 == 0:
-        #    return
-        #  else:
+    def run(self, screen):
         self.render_web(screen)
 
     def render_web(self, screen):

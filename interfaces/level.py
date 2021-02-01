@@ -15,7 +15,7 @@ class Level:
         self.number_of_level_frames = 0
         self.frame = 0
         self.opponent_condition = 0
-        self.main_character_condition = 3
+        self.main_character_condition = 0
         self.opponent = Opponent(self.level)
         self.main_character = MainCharacter()
         self.web = Web()
@@ -24,8 +24,8 @@ class Level:
         self.main_hero_health = 0
         self.opponent_health = 0
         self.pause_condition = 0
+        self.gotten_position = None
         self.turn = 0
-        self.gotten_position = []
 
     def run(self, screen):
         running = True
@@ -37,28 +37,35 @@ class Level:
             self.render_opponent_health(screen)
             self.render_pause_btn(screen)
 
-            all_about_web = self.web.run(screen, self.turn)
+            if self.turn % 2 == 0 and self.opponent_condition == 0 and \
+                    self.main_character_condition == 0:
+                self.web.run(screen)
 
             all_about_main_hero = self.main_character.run(
                 screen,
                 self.main_character_condition,
                 self.level, self.main_hero_pos)
-            if not all_about_main_hero[0]:
+            if not all_about_main_hero[3]:
+                if self.main_character_condition != 3:
+                    self.turn += 1
+                self.main_hero_health = all_about_main_hero[0]
                 self.main_character_condition = 0
-            if all_about_main_hero:
+            if all_about_main_hero[3]:
                 self.main_hero_health = all_about_main_hero[0]
 
             all_about_opponent = self.opponent.run(
                 screen,
                 self.opponent_condition, self.level, all_about_main_hero[1])
-            if not all_about_opponent:
+            if not all_about_opponent[3]:
+                if self.opponent_condition != 3:
+                    self.turn += 1
+                self.opponent_health = all_about_opponent[0]
                 self.opponent_condition = 0
-            if all_about_opponent:
-                self.opponent_health = all_about_opponent[2]
+            if all_about_opponent[3]:
+                self.opponent_health = all_about_opponent[0]
 
             self.opponent_pos = all_about_opponent[1]
             self.main_hero_pos = all_about_main_hero[1]
-
             if self.gotten_position:
                 if self.gotten_position == self.opponent_pos:
                     self.main_character_condition = 2
@@ -66,6 +73,7 @@ class Level:
                 else:
                     self.main_character_condition = 1
                     self.main_hero_pos = self.gotten_position
+                self.gotten_position = None
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -89,7 +97,6 @@ class Level:
                         if self.turn % 2 == 0:
                             self.gotten_position = self.web.get_cell(
                                 (mouse_x, mouse_y))
-                            print(self.gotten_position)
 
                 if event.type == pg.MOUSEBUTTONUP:
                     mouse_x, mouse_y = event.pos

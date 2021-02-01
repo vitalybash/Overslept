@@ -1,9 +1,5 @@
-import pygame as pg
-import sys
-
 import basic_functions as func
 from developers_settings import *
-from music.music import Music
 
 
 class MainCharacter:
@@ -22,7 +18,6 @@ class MainCharacter:
         self.damage_given = 0
 
     def run(self, screen, condition, level, pos):
-        print(pos)
         self.cell_now = pos
         self.kind = level
         posx = FIELD_BEGIN_COORDS[0] + CELL_WIDTH * self.cell_now[0] - 115
@@ -41,7 +36,7 @@ class MainCharacter:
             self.ticker_for_go = self.ticker_for_go % 5 + 1
             if self.now_go_frame == 5:
                 self.now_go_frame = 0
-                return False, self.cell_now
+                return [self.health, self.cell_now, self.damage_given, False]
         if condition == 2:
             self.now_punch_frame += 1
             if self.now_punch_frame != 0:
@@ -50,7 +45,7 @@ class MainCharacter:
             self.ticker_for_punch = self.ticker_for_punch % 7 + 1
             if self.now_punch_frame == 7:
                 self.now_punch_frame = 0
-                return False, self.cell_now
+                return [self.health, self.cell_now, self.damage_given, False]
         if condition == 3:
             self.now_hit_frame += 1
             if self.now_hit_frame != 0:
@@ -60,8 +55,8 @@ class MainCharacter:
             self.render_vibing(screen, position)
             if self.now_hit_frame == 4:
                 self.now_hit_frame = 0
-                return False, self.cell_now
-        return self.health, self.cell_now, self.damage_given
+                return [self.health, self.cell_now, self.damage_given, False]
+        return [self.health, self.cell_now, self.damage_given, True]
 
     def render_vibing(self, screen, position):
         now_frame = self.frame + self.ticker_for_vibe
