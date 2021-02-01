@@ -1,3 +1,5 @@
+import sqlite3
+
 import pygame
 
 from basic_functions import load_image
@@ -18,6 +20,10 @@ def load_setting_image(pos, link, size):
 class Settings:
     """Класс, отвечающий за настройки(громкость музыки, звуков;
     разрешение окна"""
+
+    def connect_to_db(self):
+        con = sqlite3.connect("films_db.sqlite")
+        self.cur = con.cursor()
 
     def render_settings(self, flag, flag_sound):
         """Установка изображений фона, кнопок и т. п.
@@ -98,17 +104,23 @@ class Settings:
             music_slider_way_x = 295
 
     def pinning_the_slider(self):
-        """Установка положения ползунка
+        """Установка положения ползунка и запись значений в базу данных
            Parameter:
            Returns:
         """
+        value_of_volume = 0
         music_y = 0
         if self.is_changed_music_slider is False:
             if 224 <= self.y <= 231:
                 music_y = 204
             if 321 <= self.y <= 327:
                 music_y = 301
-            if 335 <= self.x <= 355:
+            if 295 <= self.x <= 334:
+                self.music_slider = load_setting_image((275, music_y),
+                                                       PATHS[29], (64, 64))
+                self.screen.blit(self.music_slider[0],
+                                 self.music_slider[1])
+            elif 335 <= self.x <= 355:
                 self.music_slider = load_setting_image((315, music_y),
                                                        PATHS[29], (64, 64))
                 self.screen.blit(self.music_slider[0],
