@@ -22,6 +22,13 @@ class Music:
         """
         pygame.mixer.music.play(-1)
 
+    def set_volume(self, volume_of_music):
+        """Метод, проигрывающий музыку или звук
+           Parameter volume_of_music: int
+           Returns:
+        """
+        pygame.mixer.music.set_volume(volume_of_music)
+
     def stop(self):
         """Метод, останавливающий музыку или звук
            Parameter:
