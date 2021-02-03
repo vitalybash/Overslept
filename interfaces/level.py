@@ -66,13 +66,15 @@ class Level:
 
             self.opponent_pos = all_about_opponent[1]
             self.main_hero_pos = all_about_main_hero[1]
+
             if self.gotten_position:
-                if self.gotten_position == self.opponent_pos:
-                    self.main_character_condition = 2
-                    self.opponent_condition = 3
-                else:
-                    self.main_character_condition = 1
-                    self.main_hero_pos = self.gotten_position
+                if self.main_character.think(self.gotten_position):
+                    if self.gotten_position == self.opponent_pos:
+                        self.main_character_condition = 2
+                        self.opponent_condition = 3
+                    else:
+                        self.main_character_condition = 1
+                        self.main_hero_pos = self.gotten_position
                 self.gotten_position = None
 
             for event in pg.event.get():

@@ -82,3 +82,12 @@ class MainCharacter:
                                    position)[0],
                     func.load_hero(HEROES_PATHS[now_frame],
                                    position)[1])
+
+    def think(self, position):
+        if position == self.cell_now:
+            return False
+        if position[0] == self.cell_now[0] + 1 or \
+                position[0] == self.cell_now[0] - 1:
+            if position[1] == self.cell_now[1] + 1 or \
+                    position[1] == self.cell_now[1] - 1:
+                return True
