@@ -25,6 +25,7 @@ class Opponent:
         self.health = health
         self.main_character_pos = where
         self.kind = level
+        print(self.cell_now)
         posx = FIELD_BEGIN_COORDS[0] + CELL_WIDTH * self.cell_now[0]
         posy = FIELD_BEGIN_COORDS[1] + (CELL_HEIGHT * self.cell_now[1] + 1)
         position = [posx, posy]
@@ -44,7 +45,8 @@ class Opponent:
         if condition == 2:
             self.now_punch_frame += 1
             if self.now_punch_frame != 0:
-                self.render_punching(screen, position, self.now_punch_frame + 30)
+                self.render_punching(screen, position,
+                                     self.now_punch_frame + 30)
             self.ticker_for_punch = self.ticker_for_punch % 6 + 1
             if self.now_punch_frame == 6:
                 self.now_punch_frame = 0
@@ -76,7 +78,28 @@ class Opponent:
             # тут собака укусит
             return 2, self.cell_now
         else:
-            return 1, self.cell_now
+            return 1, self.where_is_the_character(main_hero_pos)
+
+    def where_is_the_character(self, char_pos):
+        new_pos = []
+        if char_pos[1] == self.cell_now:
+            if char_pos[0] < self.cell_now[0]:
+                new_pos = [self.cell_now[0] - 1, self.cell_now[1]]
+            elif char_pos[0] > self.cell_now[0]:
+                new_pos = [self.cell_now[0] + 1, self.cell_now[1]]
+        else:
+            if char_pos[1] < self.cell_now[1]:
+                if char_pos[0] < self.cell_now[0]:
+                    new_pos = [self.cell_now[0] - 1, self.cell_now[1] - 1]
+                elif char_pos[0] > self.cell_now[0]:
+                    new_pos = [self.cell_now[0] + 1, self.cell_now[1] - 1]
+            elif char_pos[1] > self.cell_now[1]:
+                if char_pos[0] < self.cell_now[0]:
+                    new_pos = [self.cell_now[0] - 1, self.cell_now[1] + 1]
+                elif char_pos[0] > self.cell_now[0]:
+                    new_pos = [self.cell_now[0] + 1, self.cell_now[1] + 1]
+        self.cell_now = new_pos
+        return new_pos
 
     def render_vibing(self, screen, position):
         now_frame = self.frame + self.ticker_for_vibe

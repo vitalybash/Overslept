@@ -20,7 +20,7 @@ class Level:
         self.main_character = MainCharacter()
         self.web = Web()
         self.opponent_pos = [7, 2]
-        self.main_hero_pos = [6, 2]
+        self.main_hero_pos = [2, 2]
         self.main_hero_health = 100
         self.opponent_health = 50
         self.pause_condition = 0
