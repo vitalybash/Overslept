@@ -1,9 +1,5 @@
-import pygame as pg
-import sys
-
 import basic_functions as func
 from developers_settings import *
-from music.music import Music
 
 
 class Opponent:
@@ -20,11 +16,14 @@ class Opponent:
         self.ticker_for_go = 1
         self.ticker_for_punch = 1
         self.now_hit_frame = 0
+        self.now_go_frame = 0
+        self.now_punch_frame = 0
         self.damage_given = 0
         self.main_character_pos = []
 
-    def run(self, screen, condition, level, main_character_pos):
-        self.main_character_pos = main_character_pos
+    def run(self, screen, condition, level, where, health):
+        self.health = health
+        self.main_character_pos = where
         self.kind = level
         posx = FIELD_BEGIN_COORDS[0] + CELL_WIDTH * self.cell_now[0]
         posy = FIELD_BEGIN_COORDS[1] + (CELL_HEIGHT * self.cell_now[1] + 1)
@@ -35,46 +34,49 @@ class Opponent:
             self.ticker_for_vibe = self.ticker_for_vibe % 2 + 1
             self.render_vibing(screen, position)
         if condition == 1:
-            self.frame = 22
+            self.now_go_frame += 1
+            if self.now_go_frame != 0:
+                self.render_going(screen, position, self.now_go_frame + 22)
             self.ticker_for_go = self.ticker_for_go % 8 + 1
-            self.render_going(screen, position)
+            if self.now_go_frame == 8:
+                self.now_go_frame = 0
+                return [self.health, self.cell_now, self.damage_given, False]
         if condition == 2:
-            self.frame = 30
+            self.now_punch_frame += 1
+            if self.now_punch_frame != 0:
+                self.render_punching(screen, position, self.now_punch_frame + 30)
             self.ticker_for_punch = self.ticker_for_punch % 6 + 1
-            self.render_punching(screen, position)
-            self.damage_given = self.damage
+            if self.now_punch_frame == 6:
+                self.now_punch_frame = 0
+                self.damage_given = self.damage
+                return [self.health, self.cell_now, self.damage_given, False]
         if condition == 3:
             self.now_hit_frame += 1
             if self.now_hit_frame != 0:
                 self.render_hit(screen, position, self.now_hit_frame)
-            self.frame = 20
             self.ticker_for_vibe = self.ticker_for_vibe % 2 + 1
             self.render_vibing(screen, position)
             if self.now_hit_frame == 4:
                 self.now_hit_frame = 0
-                self.health -= 15
                 return [self.health, self.cell_now, self.damage_given, False]
         return [self.health, self.cell_now, self.damage_given, True]
 
-    def think(self):
+    def think(self, turns, main_hero_pos):
+        life_around_cell = 0
+        self.main_character_pos = main_hero_pos
         list_of_x = [1, 1, 1, 0, 0, -1, -1, -1]
         list_of_y = [-1, 0, 1, -1, 1, -1, 0, 1]
-        for row in range(3):
-            for col in range(9):
-                life_around_cell = 0
-                for dx, dy in zip(list_of_x, list_of_y):
-                    if col + dx < 0 or col + dx >= 9 or \
-                            row + dy < 0 or row + dy >= 3:
-                        continue
-
-                if life_around_cell == 1:
-                    # тут собака укусит
-                    return True
-                else:
-                    if self.main_character_pos[1] != self.cell_now[1]:
-                        self.cell_now[1] = self.main_character_pos[1]
-                    if self.main_character_pos[0] < self.cell_now[0]:
-                        self.cell_now[0] = self.cell_now[0] - 1
+        for i in range(8):
+            if self.cell_now[0] + list_of_x[i] == \
+                    self.main_character_pos[0] and \
+                    self.cell_now[1] + list_of_y[i] == \
+                    self.main_character_pos[1]:
+                life_around_cell = 1
+        if life_around_cell == 1:
+            # тут собака укусит
+            return 2, self.cell_now
+        else:
+            return 1, self.cell_now
 
     def render_vibing(self, screen, position):
         now_frame = self.frame + self.ticker_for_vibe
@@ -83,15 +85,13 @@ class Opponent:
                     func.load_hero(HEROES_PATHS[now_frame],
                                    position)[1])
 
-    def render_going(self, screen, position):
-        now_frame = self.frame + self.ticker_for_go
+    def render_going(self, screen, position, now_frame):
         screen.blit(func.load_hero(HEROES_PATHS[now_frame],
                                    position)[0],
                     func.load_hero(HEROES_PATHS[now_frame],
                                    position)[1])
 
-    def render_punching(self, screen, position):
-        now_frame = self.frame + self.ticker_for_punch
+    def render_punching(self, screen, position, now_frame):
         screen.blit(func.load_hero(HEROES_PATHS[now_frame],
                                    position)[0],
                     func.load_hero(HEROES_PATHS[now_frame],

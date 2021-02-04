@@ -20,12 +20,13 @@ class Level:
         self.main_character = MainCharacter()
         self.web = Web()
         self.opponent_pos = [7, 2]
-        self.main_hero_pos = [1, 1]
-        self.main_hero_health = 0
-        self.opponent_health = 0
+        self.main_hero_pos = [6, 2]
+        self.main_hero_health = 100
+        self.opponent_health = 50
         self.pause_condition = 0
         self.gotten_position = None
         self.turn = 0
+        self.main_character_turns = []
 
     def run(self, screen):
         running = True
@@ -44,18 +45,29 @@ class Level:
             all_about_main_hero = self.main_character.run(
                 screen,
                 self.main_character_condition,
-                self.level, self.main_hero_pos)
+                self.level, self.main_hero_pos,
+                self.main_hero_health)
             if not all_about_main_hero[3]:
                 if self.main_character_condition != 3:
                     self.turn += 1
                 self.main_hero_health = all_about_main_hero[0]
+                if self.main_character_condition != 3:
+                    self.main_character_turns.append(
+                        self.main_character_condition)
                 self.main_character_condition = 0
             if all_about_main_hero[3]:
                 self.main_hero_health = all_about_main_hero[0]
 
+            if self.turn % 2 == 1:
+                self.opponent_condition, self.opponent_pos = \
+                    self.opponent.think(
+                        self.main_character_turns,
+                        all_about_main_hero[1])
             all_about_opponent = self.opponent.run(
                 screen,
-                self.opponent_condition, self.level, all_about_main_hero[1])
+                self.opponent_condition, self.level, self.opponent_pos,
+                self.opponent_health)
+
             if not all_about_opponent[3]:
                 if self.opponent_condition != 3:
                     self.turn += 1
@@ -63,6 +75,11 @@ class Level:
                 self.opponent_condition = 0
             if all_about_opponent[3]:
                 self.opponent_health = all_about_opponent[0]
+
+            self.main_hero_health -= all_about_opponent[2]
+            self.opponent_health -= all_about_main_hero[2]
+            if all_about_opponent[2]:
+                self.main_character_condition = 3
 
             self.opponent_pos = all_about_opponent[1]
             self.main_hero_pos = all_about_main_hero[1]
@@ -76,6 +93,9 @@ class Level:
                         self.main_character_condition = 1
                         self.main_hero_pos = self.gotten_position
                 self.gotten_position = None
+
+            if self.main_hero_health <= 0 or self.opponent_health <= 0:
+                running = False
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
