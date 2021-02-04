@@ -3,6 +3,7 @@ import pygame as pg
 import basic_functions as func
 from developers_settings import *
 from interfaces.main_character import MainCharacter
+from music.music import Music
 from interfaces.opponent import Opponent
 from interfaces.web import Web
 
@@ -70,6 +71,8 @@ class Level:
                 if self.gotten_position == self.opponent_pos:
                     self.main_character_condition = 2
                     self.opponent_condition = 3
+                    Music().play('main_character_punch.wav')
+                    Music().play('dog_hit.wav')
                 else:
                     self.main_character_condition = 1
                     self.main_hero_pos = self.gotten_position
