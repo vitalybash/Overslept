@@ -18,11 +18,12 @@ class MainCharacter:
         self.damage_given = 0
 
     def run(self, screen, condition, level, pos, health):
+        print(self.cell_now)
         self.health = health
         self.cell_now = pos
         self.kind = level
-        posx = FIELD_BEGIN_COORDS[0] + CELL_WIDTH * (self.cell_now[0]) - 115
-        posy = FIELD_BEGIN_COORDS[1] + \
+        posx = FIELD_BEGIN_COORDS[0] + 100 + CELL_WIDTH * (self.cell_now[0]) - 115
+        posy = FIELD_BEGIN_COORDS[1] + 20 + \
                CELL_HEIGHT * (self.cell_now[1] + 1) - 10
         position = [posx, posy]
         if condition == 0:

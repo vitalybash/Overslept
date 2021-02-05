@@ -63,14 +63,13 @@ class Level:
                     self.opponent.think(
                         self.main_character_turns,
                         all_about_main_hero[1])
+                self.turn += 1
             all_about_opponent = self.opponent.run(
                 screen,
                 self.opponent_condition, self.level, self.opponent_pos,
                 self.opponent_health)
 
             if not all_about_opponent[3]:
-                if self.opponent_condition != 3:
-                    self.turn += 1
                 self.opponent_health = all_about_opponent[0]
                 self.opponent_condition = 0
             if all_about_opponent[3]:

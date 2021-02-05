@@ -22,12 +22,12 @@ class Opponent:
         self.main_character_pos = []
 
     def run(self, screen, condition, level, where, health):
+        print(self.cell_now)
         self.health = health
         self.main_character_pos = where
         self.kind = level
-        print(self.cell_now)
-        posx = FIELD_BEGIN_COORDS[0] + CELL_WIDTH * self.cell_now[0]
-        posy = FIELD_BEGIN_COORDS[1] + (CELL_HEIGHT * self.cell_now[1] + 1)
+        posx = FIELD_BEGIN_COORDS[0] + 100 + CELL_WIDTH * self.cell_now[0] + 1
+        posy = FIELD_BEGIN_COORDS[1] + 20 + CELL_HEIGHT * self.cell_now[1] + 1
         position = [posx, posy]
         if condition == 0:
             self.damage_given = 0
@@ -77,12 +77,12 @@ class Opponent:
         if life_around_cell == 1:
             # тут собака укусит
             return 2, self.cell_now
-        else:
+        if life_around_cell == 0:
             return 1, self.where_is_the_character(main_hero_pos)
 
     def where_is_the_character(self, char_pos):
-        new_pos = []
-        if char_pos[1] == self.cell_now:
+        new_pos = None
+        if char_pos[1] == self.cell_now[1]:
             if char_pos[0] < self.cell_now[0]:
                 new_pos = [self.cell_now[0] - 1, self.cell_now[1]]
             elif char_pos[0] > self.cell_now[0]:
@@ -98,8 +98,9 @@ class Opponent:
                     new_pos = [self.cell_now[0] - 1, self.cell_now[1] + 1]
                 elif char_pos[0] > self.cell_now[0]:
                     new_pos = [self.cell_now[0] + 1, self.cell_now[1] + 1]
-        self.cell_now = new_pos
-        return new_pos
+        if new_pos:
+            self.cell_now = new_pos
+        return self.cell_now
 
     def render_vibing(self, screen, position):
         now_frame = self.frame + self.ticker_for_vibe

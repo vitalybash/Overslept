@@ -27,8 +27,8 @@ class Web:
     def get_cell(self, mouse_pos):
         x, y = mouse_pos
         # Если пользователь щелкнул мимо сетки по горизонтали
-        cell_x = (x - self.top_right_coords[0]) // self.width_cell + 1
-        cell_y = (y - self.top_right_coords[1]) // self.height_cell + 1
+        cell_x = (x - self.top_right_coords[0]) // self.width_cell
+        cell_y = (y - self.top_right_coords[1]) // self.height_cell
         if cell_x < 0 or cell_x >= 9 or \
                 cell_y < 0 or cell_y >= 3:
             return None
