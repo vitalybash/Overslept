@@ -29,6 +29,9 @@ class Level:
         self.gotten_position = []
 
     def run(self, screen):
+        # Установка музыки уровня
+        music_level = Music('level_melody.ogg')
+        music_level.run()
         running = True
         while running:
             pause_coords = PAUSE_BTN_COORDS
@@ -71,6 +74,7 @@ class Level:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
+                    music_level.stop()
                     music_map = Music('map_melody.ogg')
                     music_map.run()
 

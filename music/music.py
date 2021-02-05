@@ -14,6 +14,8 @@ class Music:
             pygame.mixer.music.load('music/music_data/main_menu_melody.ogg')
         elif name_music == 'map_melody.ogg':
             pygame.mixer.music.load('music/music_data/map_melody.ogg')
+        elif name_music == 'level_melody.ogg':
+            pygame.mixer.music.load('music/music_data/level_melody.ogg')
 
     def run(self):
         """Метод, проигрывающий музыку или звук

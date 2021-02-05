@@ -28,23 +28,32 @@ class Settings:
         self.con = sqlite3.connect('data/level_of_music.db')
         self.cur = self.con.cursor()
 
-    def get_from_db(self):
+    def get_from_db(self, which_type):
         """Получение данных с базы данных
            Parameter:
            Returns volume_of_music: int
         """
         volume_of_melody = self.cur.execute('SELECT value_of_volume '
                                             'FROM music '
-                                            'WHERE type = "melody"').fetchone()[
+                                            f'WHERE type = "{which_type}"').fetchone()[
             0]
         return volume_of_melody
 
-    def return_slider_location(self):
+    def get_button_from_db(self):
+        """Получение данных с базы данных
+           Parameter:
+           Returns type_of_button: str
+        """
+        type_of_button = self.cur.execute('SELECT which_button '
+                                          'FROM buttons').fetchone()[0]
+        return type_of_button
+
+    def return_slider_location(self, which_type):
         """Получение данных с базы данных
            Parameter:
            Returns x_slider: int
         """
-        slider_location = self.get_from_db()
+        slider_location = self.get_from_db(which_type)
         if slider_location == 0:
             x_slider = 275
         elif slider_location == 0.1:
@@ -92,7 +101,7 @@ class Settings:
         music_slider_way = load_setting_image((275, 196), PATHS[28], (512, 64))
         self.screen.blit(music_slider_way[0], music_slider_way[1])
         self.music_slider = load_setting_image(
-            (self.return_slider_location(), 204), PATHS[29],
+            (self.return_slider_location('melody'), 204), PATHS[29],
             (64, 64))
         self.screen.blit(self.music_slider[0], self.music_slider[1])
         # установка текста и ползунков, относящихся к звукам
@@ -101,20 +110,27 @@ class Settings:
                          (92, 296, 188, 572))
         sound_slider_way = load_setting_image((275, 292), PATHS[28], (512, 64))
         self.screen.blit(sound_slider_way[0], sound_slider_way[1])
-        self.sound_slider = load_setting_image((275, 300), PATHS[29],
-                                               (64, 64))
+        self.sound_slider = load_setting_image(
+            (self.return_slider_location('sound'), 300), PATHS[29],
+            (64, 64))
         self.screen.blit(self.sound_slider[0], self.sound_slider[1])
         # установка текста и кнопок, относящихся к полноэкранному режиму
         self.screen.blit(self.font.render('полноэкранный режим:', True,
                                           (250, 250, 250)),
                          (92, 392, 188, 572))
-        yes_button = load_setting_image((540, 388), PATHS[26], (64, 64))
-        self.screen.blit(yes_button[0], yes_button[1])
+        if self.get_button_from_db() == 'yes':
+            yes_button = load_setting_image((540, 388), PATHS[27], (64, 64))
+            self.screen.blit(yes_button[0], yes_button[1])
+            no_button = load_setting_image((700, 388), PATHS[26], (64, 64))
+            self.screen.blit(no_button[0], no_button[1])
+        else:
+            yes_button = load_setting_image((540, 388), PATHS[26], (64, 64))
+            self.screen.blit(yes_button[0], yes_button[1])
+            no_button = load_setting_image((700, 388), PATHS[27], (64, 64))
+            self.screen.blit(no_button[0], no_button[1])
         self.screen.blit(self.font.render('да', True,
                                           (250, 250, 250)),
                          (620, 392, 188, 572))
-        no_button = load_setting_image((700, 388), PATHS[27], (64, 64))
-        self.screen.blit(no_button[0], no_button[1])
         self.screen.blit(self.font.render('нет', True,
                                           (250, 250, 250)),
                          (780, 392, 188, 572))
@@ -247,11 +263,23 @@ class Settings:
             self.screen.blit(yes_button[0], yes_button[1])
             no_button = load_setting_image((700, 388), PATHS[26], (64, 64))
             self.screen.blit(no_button[0], no_button[1])
+            self.add_button_to_db('yes')
         else:
             yes_button = load_setting_image((540, 388), PATHS[26], (64, 64))
             self.screen.blit(yes_button[0], yes_button[1])
             no_button = load_setting_image((700, 388), PATHS[27], (64, 64))
             self.screen.blit(no_button[0], no_button[1])
+            self.add_button_to_db('no')
+
+    def add_button_to_db(self, which_type):
+        """Запись значений в базу данных
+           Parameters which_type: str
+           Returns:
+        """
+        self.cur.execute('UPDATE buttons '
+                         f'SET which_button = "{which_type}" '
+                         f'WHERE id = 1')
+        self.con.commit()
 
     def run(self, screen, music_menu):
         """Открытие настроек
@@ -274,13 +302,16 @@ class Settings:
                         if 564 <= self.x <= 578 and 411 <= self.y <= 426 or \
                                 724 <= self.x <= 739 and 411 <= self.y <= 426:
                             self.button_pressed()
+                            self.render_settings()
                         elif 295 <= self.x <= 766 and 224 <= self.y <= 231:
                             self.is_changed_music_slider = True
                 if event.type == pygame.MOUSEBUTTONUP:
                     self.is_changed_music_slider = False
                     if 295 <= self.x <= 766 and 224 <= self.y <= 231:
                         self.pinning_the_slider()
-                        music_menu.set_volume(self.get_from_db())
+                        music_menu.set_volume(self.get_from_db('melody'))
+                        self.render_settings()
                     elif 295 <= self.x <= 766 and 321 <= self.y <= 327:
                         self.pinning_the_slider()
+                        self.render_settings()
             pygame.display.flip()
