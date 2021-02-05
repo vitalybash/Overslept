@@ -18,7 +18,6 @@ class MainCharacter:
         self.damage_given = 0
 
     def run(self, screen, condition, level, pos, health):
-        print(self.cell_now)
         self.health = health
         self.cell_now = pos
         self.kind = level

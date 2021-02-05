@@ -625,7 +625,7 @@ class LevelHub:
             if button == 1:
                 # Остановка музыки карты
                 music_map.stop()
-                Level(1).run(screen)
+                self.money += Level(1).run(screen)
             #  проверка нажатия на паузу
 
     def names_render(self, screen):

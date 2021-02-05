@@ -22,7 +22,6 @@ class Opponent:
         self.main_character_pos = []
 
     def run(self, screen, condition, level, where, health):
-        print(self.cell_now)
         self.health = health
         self.main_character_pos = where
         self.kind = level
