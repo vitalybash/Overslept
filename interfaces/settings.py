@@ -33,11 +33,11 @@ class Settings:
            Parameter:
            Returns volume_of_music: int
         """
-        volume_of_melody = self.cur.execute('SELECT value_of_volume '
-                                            'FROM music '
-                                            f'WHERE type = "{which_type}"').fetchone()[
+        volume_of_music = self.cur.execute('SELECT value_of_volume '
+                                           'FROM music '
+                                           f'WHERE type = "{which_type}"').fetchone()[
             0]
-        return volume_of_melody
+        return volume_of_music
 
     def get_button_from_db(self):
         """Получение данных с базы данных

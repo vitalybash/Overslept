@@ -1,4 +1,5 @@
 import pygame as pg
+import sqlite3
 
 import basic_functions as func
 from developers_settings import *
@@ -31,7 +32,30 @@ class Level:
         self.game_condition = 0
         self.game_over_tick = 20
 
+    def connect_to_db(self):
+        """Подключение к базе данных
+           Parameter:
+           Returns:
+        """
+        self.con = sqlite3.connect('data/level_of_music.db')
+        self.cur = self.con.cursor()
+
+    def get_from_db(self, which_type):
+        """Получение данных с базы данных
+           Parameter:
+           Returns volume_of_music: int
+        """
+        volume_of_music = self.cur.execute('SELECT value_of_volume '
+                                           'FROM music '
+                                           f'WHERE type = "{which_type}"').fetchone()[
+            0]
+        return volume_of_music
+
     def run(self, screen):
+        self.connect_to_db()
+        # Установка музыки карты
+        music_level = Music('level_melody.ogg')
+        music_level.run()
         running = True
         while running:
             pause_coords = PAUSE_BTN_COORDS
@@ -83,6 +107,11 @@ class Level:
                 self.opponent_health -= all_about_main_hero[2]
                 if all_about_opponent[2]:
                     self.main_character_condition = 3
+                    Music().play(
+                        'music/music_data/main_character_hit.wav',
+                        self.get_from_db('sound'))
+                    Music().play('music/music_data/dog_punch.wav',
+                                 self.get_from_db('sound'))
 
                 self.opponent_pos = all_about_opponent[1]
                 self.main_hero_pos = all_about_main_hero[1]
@@ -92,6 +121,11 @@ class Level:
                         if self.gotten_position == self.opponent_pos:
                             self.main_character_condition = 2
                             self.opponent_condition = 3
+                            Music().play(
+                                'music/music_data/main_character_punch.wav',
+                                self.get_from_db('sound'))
+                            Music().play('music/music_data/dog_hit.wav',
+                                         self.get_from_db('sound'))
                         else:
                             self.main_character_condition = 1
                             self.main_hero_pos = self.gotten_position
@@ -105,6 +139,8 @@ class Level:
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
                         running = False
+                        # Остановка музыки уровня
+                        music_level.stop()
                         music_map = Music('map_melody.ogg')
                         music_map.run()
 
@@ -146,6 +182,10 @@ class Level:
                         return 20
                     else:
                         return 0
+                # Остановка музыки уровня
+                music_level.stop()
+                music_map = Music('map_melody.ogg')
+                music_map.run()
 
             self.clock.tick(self.fps)
             pg.display.flip()
