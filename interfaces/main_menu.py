@@ -1,4 +1,5 @@
 import pygame
+import sqlite3
 from developers_settings import *
 from basic_functions import load_image
 from interfaces.level_hub import LevelHub
@@ -17,12 +18,36 @@ class MainMenu:
         # кнопок
         self.is_pressed = False  # Флаг зажатой клавиши мыши
 
+    def connect_to_db(self):
+        """Подключение к базе данных
+           Parameter:
+           Returns:
+        """
+        con = sqlite3.connect('data/level_of_music.db')
+        self.cur = con.cursor()
+
+    def get_from_db(self):
+        """Получение данных с базы данных
+           Parameter:
+           Returns volume_of_music: int
+        """
+        volume_of_melody = self.cur.execute('SELECT value_of_volume '
+                                            'FROM music '
+                                            'WHERE type = "melody"').fetchone()[
+            0]
+        return volume_of_melody
+
     def run(self, screen):
-        """Игровой цикл"""
+        """Игровой цикл
+           Parameter screen: surface
+           Returns:
+        """
+        self.connect_to_db()
         running = True
         # Установка музыки главного меню
         music_menu = Music('main_menu_melody.ogg')
         music_menu.run()
+        music_menu.set_volume(self.get_from_db())
 
         while running:
             # Установка спрайта фона
